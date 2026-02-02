@@ -5,13 +5,18 @@ import java.io.*;
 
 public class Tcp {
 
-    private final ServerSocket serverSocket;
+    private ServerSocket serverSocket;
     private Socket clientSocket;
     private OutputStream out;
     private InputStream in;
 
     public Tcp(int port) throws IOException {
         serverSocket = new ServerSocket(port);
+    }
+
+    public Tcp(Socket clientSocket) throws IOException {
+        this.clientSocket = clientSocket;
+        out = clientSocket.getOutputStream();
     }
 
     public void waitForConnection() throws IOException {
@@ -32,5 +37,21 @@ public class Tcp {
 
     public void sendData(String data) throws IOException {
         out.write(data.getBytes());
+    }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public Socket getClientSocket() {
+        return clientSocket;
+    }
+
+    public OutputStream getOut() {
+        return out;
+    }
+
+    public InputStream getIn() {
+        return in;
     }
 }
