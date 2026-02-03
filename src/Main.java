@@ -7,13 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
-
-
-    public static final String CR = String.valueOf((char) 13); // carriage return | moves cursor to beginning of line
-    public static final String LF = String.valueOf((char) 10); // linefeed | moves cursor into line below
-    public static final String SP = String.valueOf((char) 9); // space
-    public static final String HT =  String.valueOf((char) 9); // horizontal-tab
-
     public static void main(String[] args) throws IOException {
         Tcp connections = new Tcp(8080);
 
