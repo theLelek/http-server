@@ -1,3 +1,4 @@
+import request.InvalidRequest;
 import request.parser.RequestParser;
 import tcp.Tcp;
 
@@ -7,7 +8,7 @@ import java.io.*;
 import java.util.Arrays;
 
 public class Client {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InvalidRequest {
         Tcp client = new Tcp(8081);
         client.connect("127.0.0.1", 8080);
         client.sendData("hello world");

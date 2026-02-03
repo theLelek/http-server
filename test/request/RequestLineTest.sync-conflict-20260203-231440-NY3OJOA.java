@@ -1,16 +1,14 @@
 package request;
 
 import org.junit.jupiter.api.Test;
-import request.parser.AnsiConstants;
-//import request.parser.AnsiConstants;
+import request.parser.Constants;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RequestLineTest {
     @Test
-    void constructorTest() throws InvalidRequest {
-        String requestLineArgument1 = "GET /example.com HTTP/1.2" + AnsiConstants.CR + AnsiConstants.LF;
+    void constructorTest() {
+        String requestLineArgument1 = "GET /example.com HTTP/1.2" + Constants.CR + Constants.LF;
         RequestLine requestLine1 = new RequestLine(requestLineArgument1);
         assertEquals("GET", requestLine1.getMethod());
         assertEquals("/example.com", requestLine1.getUri());
@@ -18,20 +16,24 @@ class RequestLineTest {
         assertEquals(2, requestLine1.getMinorVersion());
         assertEquals(requestLineArgument1, requestLine1.toString());
 
-        String requestLineArgument2 = "POST / HTTP/33.20" + AnsiConstants.CR + AnsiConstants.LF;
+        String requestLineArgument2 = "POST / HTTP/33.20" + Constants.CR + Constants.LF;
         RequestLine requestLine2 = new RequestLine(requestLineArgument2);
         assertEquals("POST", requestLine2.getMethod());
         assertEquals("/", requestLine2.getUri());
         assertEquals(33, requestLine2.getMajorVersion());
         assertEquals(20, requestLine2.getMinorVersion());
         assertEquals(requestLineArgument2, requestLine2.toString());
+
+        String requestLineArgument3 = "POST / aösldkfj23234420" + Constants.CR + Constants.LF;
+
+        try {
+            RequestLine requestLine3 = new RequestLine(requestLineArgument3);
+        } catch (IllegalArgumentException e) {
+            assertTrue(true);
+        }
+        assertEquals(requestLineArgument3, requestLine3.toString());
+
+
     }
 
-    @Test
-    void testInvalidRequestLineThrowsException() {
-        String requestLineArgument = "POST / aösldkfj23234420";
-        assertThrows(InvalidRequest.class, () -> {
-            new RequestLine(requestLineArgument);
-        });
-    }
 }

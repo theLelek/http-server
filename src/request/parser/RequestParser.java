@@ -6,10 +6,25 @@ import request.Request;
 public class RequestParser {
 
     public static Request parseRequest(byte[] requestBytes) throws InvalidRequest {
-        String head = headToString(requestBytes);
-        String[] parts = head.split("\n");
+//        String head = headToString(requestBytes);
+//        String[] parts = head.split("\n");
+
+        String stringRequest = everythingToString(requestBytes);
+        String requestLine = getRequestLine(requestBytes);
+        System.out.println(requestLine);
 
         return null;
+    }
+
+    private static String getRequestLine(byte[] requestBytes) {
+        // TODO getRequestLine doesnt work (i think because of firstIndexOf)
+        byte[] toFind = {AnsiConstants.CR, AnsiConstants.LF};
+        int crlfIndex = firstIndexOf(requestBytes, toFind);
+        String requestLine = "";
+        for (int i = 0; i < crlfIndex + 2; i++) {
+            requestLine += (char) requestBytes[i];
+        }
+        return requestLine;
     }
 
     public static void parseRequestLine(byte[] requestBytes) {
@@ -53,7 +68,8 @@ public class RequestParser {
         return out;
     }
 
-    public static int firstIndexOf(byte[] arr, byte[] toSearch) {
+    private static int firstIndexOf(byte[] arr, byte[] toSearch) {
+        // TODO can maybe be done faster
         for (int i = 0; i < arr.length - toSearch.length - 1; i += toSearch.length) {
             boolean matches = true;
             for (int j = i; j < i + toSearch.length; j++) {

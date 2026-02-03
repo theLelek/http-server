@@ -1,6 +1,6 @@
 package request;
 
-import request.parser.AnsiConstants;
+import request.parser.Constants;
 
 public class RequestLine {
 
@@ -16,7 +16,7 @@ public class RequestLine {
         this.minorVersion = minorVersion;
     }
 
-    public RequestLine(String requestLine) throws InvalidRequest {
+    public RequestLine(String requestLine) {
         if (requestLine == null) {
             throw new InvalidRequest("invalid RequestLine");
         }
@@ -56,6 +56,6 @@ public class RequestLine {
 
     @Override
     public String toString() {
-        return String.format("%s %s HTTP/%d.%d" + AnsiConstants.CR + AnsiConstants.LF, method, uri, majorVersion, minorVersion);
+        return String.format("%s %s HTTP/%d.%d" + Constants.CR + Constants.LF, method, uri, majorVersion, minorVersion);
     }
 }

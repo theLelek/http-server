@@ -17,8 +17,12 @@ public class RequestHandler implements Runnable {
 
     @Override
     public void run() {
-        Request parsedRequest = RequestParser.parseRequest(requestBytes);
-        System.out.println(RequestParser.everythingToString(requestBytes));
+        try {
+            Request parsedRequest = RequestParser.parseRequest(requestBytes);
+        } catch (InvalidRequest e) {
+            return;
+        }
+//        System.out.println(RequestParser.everythingToString(requestBytes));
         try {
             Thread.sleep(10000000);
         } catch (InterruptedException e) {
