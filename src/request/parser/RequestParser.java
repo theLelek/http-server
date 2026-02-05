@@ -19,21 +19,21 @@ public class RequestParser {
         byte[] toFind = {HttpConstants.CR};
         int crlfIndex = firstIndexOf(requestBytes, toFind);
         if (crlfIndex == -1) {
-            throw new InvalidRequest("invalid RequestLine");
+            throw new InvalidRequest(400, "Bad Request", "invalid Request", "CR not contained in request");
         }
-        String requestLine = "";
+        StringBuilder requestLine = new StringBuilder();
         for (int i = 0; i < crlfIndex + 2; i++) {
-            requestLine += (char) requestBytes[i];
+            requestLine.append((char) requestBytes[i]);
         }
-        return requestLine;
+        return requestLine.toString();
     }
 
     public static String everythingToString(byte[] request) {
-        String out = "";
-        for (int i = 0; i < request.length; i++) {
-            out += (char) request[i];
+        StringBuilder out = new StringBuilder();
+        for (byte b : request) {
+            out.append((char) b);
         }
-        return out;
+        return out.toString();
     }
 
     public static int firstIndexOf(byte[] arr, byte[] toSearch) {

@@ -19,7 +19,7 @@ public class RequestLine {
 
     public RequestLine(String requestLine) throws InvalidRequest {
         if (requestLine == null) {
-            throw new InvalidRequest("invalid RequestLine");
+            throw new InvalidRequest(400, "Bad Request", "invalid Request", "requestLine is null");
         }
         requestLine = requestLine.trim();
         try {
@@ -29,7 +29,7 @@ public class RequestLine {
             this.uri = parts[1];
             String httpVersion = parts[2];
 
-            String[] httpVersionParts = parts[2].split("/");
+            String[] httpVersionParts = httpVersion.split("/");
             String versionNumbers = httpVersionParts[1]; // eg. = "1.1"
             String[] versionNumberParts = versionNumbers.split("\\.");
             int majorVersion = Integer.parseInt(versionNumberParts[0]);
@@ -39,7 +39,7 @@ public class RequestLine {
 
         catch (Exception ex) {
             if (!(ex instanceof InvalidRequest)) {
-                throw new InvalidRequest("400 Bad Request: invalid requestLine");
+                throw new InvalidRequest(400, "Bad Request", "invalid Request", "RequestLine bytes couldn't be parsed");
             }
             throw ex;
         }
@@ -47,10 +47,10 @@ public class RequestLine {
 
    public static void isMethodAllowed(String method) throws InvalidRequest {
         if (! Arrays.asList(HttpConstants.knownMethods).contains(method)) {
-            throw new InvalidRequest("501 Not Implemented: method is not known");
+            throw new InvalidRequest(501, "Not Implemented", "invalid Request", "Request method is not known (known methods can be changed in parser.HttpConstants)");
         }
         if (! Arrays.asList(HttpConstants.implementedMethods).contains(method)) {
-            throw new InvalidRequest("405 method not allowed: method is not implemented");
+            throw new InvalidRequest(405, "method not allowed", "invalid Request", "Request method is not implemented (implemented methods can be changed in parser.HttpConstants)");
        }
    }
 
