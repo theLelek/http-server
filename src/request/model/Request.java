@@ -1,6 +1,4 @@
-package request;
-
-import request.parser.RequestParser;
+package request.model;
 
 public class Request {
 

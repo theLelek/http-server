@@ -1,4 +1,4 @@
-package request.parser;
+package request;
 
 public class HttpConstants {
 
@@ -7,7 +7,7 @@ public class HttpConstants {
     public static final char SP = ' ';
     public static final char HT = '\t';
 
-    public static final String[] implementedMethods = {"GET"};
+    public static final String[] implementedMethods = {"GET", "HEAD"}; // TODO not implemented yet
     public static final String[] knownMethods = {"OPTIONS", "GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "CONNECT"};
 
 

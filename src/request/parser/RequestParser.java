@@ -1,8 +1,9 @@
 package request.parser;
 
-import request.InvalidRequest;
-import request.Request;
-import request.RequestLine;
+import request.HttpConstants;
+import request.exceptions.InvalidRequest;
+import request.model.Request;
+import request.model.RequestLine;
 
 public class RequestParser {
 
@@ -18,8 +19,7 @@ public class RequestParser {
     }
 
     private static String getRequestLine(byte[] requestBytes) throws InvalidRequest {
-        // TODO getRequestLine doesnt work (i think because of firstIndexOf)
-        byte[] toFind = {AnsiConstants.CR, AnsiConstants.LF};
+        byte[] toFind = {HttpConstants.CR};
         int crlfIndex = firstIndexOf(requestBytes, toFind);
         if (crlfIndex == -1) {
             throw new InvalidRequest("invalid RequestLine");
@@ -39,7 +39,7 @@ public class RequestParser {
         return out;
     }
 
-    private static int firstIndexOf(byte[] arr, byte[] toSearch) {
+    public static int firstIndexOf(byte[] arr, byte[] toSearch) {
         // TODO can maybe be done faster
         for (int i = 0; i < arr.length - toSearch.length + 1; i++) {
             int matches = 0;

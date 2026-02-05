@@ -1,10 +1,11 @@
-import request.InvalidRequest;
-import request.parser.RequestParser;
-
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+import request.exceptions.InvalidRequest;
+import java.util.Arrays;
 
 public class Test {
     public static void main(String[] args) throws InvalidRequest {
+        int[] arr = {1,2,3};
+
+        System.out.println();
+
     }
 }

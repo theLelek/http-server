@@ -1,4 +1,4 @@
-package request;
+package request.exceptions;
 
 public class InvalidRequest extends Exception {
     public InvalidRequest(String message) {

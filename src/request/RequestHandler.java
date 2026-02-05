@@ -1,9 +1,9 @@
 package request;
 
+import request.exceptions.InvalidRequest;
+import request.model.Request;
 import request.parser.RequestParser;
 import tcp.Tcp;
-
-import java.util.Arrays;
 
 public class RequestHandler implements Runnable {
 

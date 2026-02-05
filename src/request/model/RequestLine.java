@@ -1,6 +1,9 @@
-package request;
+package request.model;
 
-import request.parser.AnsiConstants;
+import request.exceptions.InvalidRequest;
+import request.HttpConstants;
+
+import java.util.Arrays;
 
 public class RequestLine {
 
@@ -11,7 +14,7 @@ public class RequestLine {
 
     public RequestLine(String method, String uri, int majorVersion, int minorVersion) {
         this.method = method;
-        this.uri = uri;
+        this.uri = uri; // TODO implement Uri class
         this.majorVersion = majorVersion;
         this.minorVersion = minorVersion;
     }
@@ -24,6 +27,7 @@ public class RequestLine {
         try {
             String[] parts = requestLine.split(" ");
             this.method = parts[0];
+            isMethodAllowed(method);
             this.uri = parts[1];
             String httpVersion = parts[2];
 
@@ -32,10 +36,28 @@ public class RequestLine {
             String[] versionNumberParts = versionNumbers.split("\\.");
             this.majorVersion = Integer.parseInt(versionNumberParts[0]);
             this.minorVersion = Integer.parseInt(versionNumberParts[1]);
-        } catch (Exception ex) {
-            throw new InvalidRequest("invalid RequestLine");
+
+
+        }
+
+        catch (Exception ex) {
+            if (!(ex instanceof InvalidRequest)) {
+                throw new InvalidRequest("invalid requestLine");
+            }
+            throw ex;
         }
    }
+
+   public static void isMethodAllowed(String method) throws InvalidRequest {
+        if (! Arrays.asList(HttpConstants.knownMethods).contains(method)) {
+            throw new InvalidRequest("error: 501 \"method not known\"");
+        }
+        if (! Arrays.asList(HttpConstants.implementedMethods).contains(method)) {
+            throw new InvalidRequest("error: 405 \"method not allowed\"");
+       }
+   }
+
+
 
 
     public String getMethod() {
@@ -56,6 +78,6 @@ public class RequestLine {
 
     @Override
     public String toString() {
-        return String.format("%s %s HTTP/%d.%d" + AnsiConstants.CR + AnsiConstants.LF, method, uri, majorVersion, minorVersion);
+        return String.format("%s %s HTTP/%d.%d" + HttpConstants.CR + HttpConstants.LF, method, uri, majorVersion, minorVersion);
     }
 }

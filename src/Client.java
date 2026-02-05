@@ -1,11 +1,8 @@
-import request.InvalidRequest;
+import request.exceptions.InvalidRequest;
 import request.parser.RequestParser;
 import tcp.Tcp;
 
-import java.net.*;
 import java.io.*;
-
-import java.util.Arrays;
 
 public class Client {
     public static void main(String[] args) throws IOException, InvalidRequest {
