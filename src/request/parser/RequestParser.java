@@ -8,9 +8,6 @@ import request.model.RequestLine;
 public class RequestParser {
 
     public static Request parseRequest(byte[] requestBytes) throws InvalidRequest {
-//        String head = headToString(requestBytes);
-//        String[] parts = head.split("\n");
-
         String stringRequest = everythingToString(requestBytes);
         RequestLine requestLine = new RequestLine(getRequestLine(requestBytes)); // ignores leading whitespaces
         System.out.println(requestLine);

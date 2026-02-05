@@ -9,14 +9,12 @@ public class RequestLine {
 
     private final String method;
     private final String uri;
-    private final int majorVersion;
-    private final int minorVersion;
+    private final Version version;
 
     public RequestLine(String method, String uri, int majorVersion, int minorVersion) {
         this.method = method;
         this.uri = uri; // TODO implement Uri class
-        this.majorVersion = majorVersion;
-        this.minorVersion = minorVersion;
+        this.version = new Version(majorVersion, minorVersion);
     }
 
     public RequestLine(String requestLine) throws InvalidRequest {
@@ -34,15 +32,14 @@ public class RequestLine {
             String[] httpVersionParts = parts[2].split("/");
             String versionNumbers = httpVersionParts[1]; // eg. = "1.1"
             String[] versionNumberParts = versionNumbers.split("\\.");
-            this.majorVersion = Integer.parseInt(versionNumberParts[0]);
-            this.minorVersion = Integer.parseInt(versionNumberParts[1]);
-
-
+            int majorVersion = Integer.parseInt(versionNumberParts[0]);
+            int minorVersion = Integer.parseInt(versionNumberParts[1]);
+            version = new Version(majorVersion, minorVersion);
         }
 
         catch (Exception ex) {
             if (!(ex instanceof InvalidRequest)) {
-                throw new InvalidRequest("invalid requestLine");
+                throw new InvalidRequest("400 Bad Request: invalid requestLine");
             }
             throw ex;
         }
@@ -50,15 +47,12 @@ public class RequestLine {
 
    public static void isMethodAllowed(String method) throws InvalidRequest {
         if (! Arrays.asList(HttpConstants.knownMethods).contains(method)) {
-            throw new InvalidRequest("error: 501 \"method not known\"");
+            throw new InvalidRequest("501 Not Implemented: method is not known");
         }
         if (! Arrays.asList(HttpConstants.implementedMethods).contains(method)) {
-            throw new InvalidRequest("error: 405 \"method not allowed\"");
+            throw new InvalidRequest("405 method not allowed: method is not implemented");
        }
    }
-
-
-
 
     public String getMethod() {
         return method;
@@ -68,16 +62,12 @@ public class RequestLine {
         return uri;
     }
 
-    public int getMajorVersion() {
-        return majorVersion;
-    }
-
-    public int getMinorVersion() {
-        return minorVersion;
+    public Version getVersion() {
+        return version;
     }
 
     @Override
     public String toString() {
-        return String.format("%s %s HTTP/%d.%d" + HttpConstants.CR + HttpConstants.LF, method, uri, majorVersion, minorVersion);
+        return String.format("%s %s HTTP/%d.%d" + HttpConstants.CR + HttpConstants.LF, method, uri, version.getMajorVersion(), version.getMinorVersion());
     }
 }
