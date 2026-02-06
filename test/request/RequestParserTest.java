@@ -6,12 +6,15 @@ import request.model.RequestLine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static request.RequestParser.initializeRequestLine;
+import java.util.ArrayList;
 
-class RequestLineTest {
+class RequestParserTest {
+
     @Test
-    void constructorTest() throws InvalidRequest {
+    void initializeRequestLineTest() {
         String requestLineArgument1 = "GET /example.com HTTP/1.2" + HttpConstants.CR + HttpConstants.LF;
-        RequestLine requestLine1 = new RequestLine(requestLineArgument1);
+        RequestLine requestLine1 = initializeRequestLine(stringToBytesArray(requestLineArgument1));
         assertEquals("GET", requestLine1.getMethod());
         assertEquals("/example.com", requestLine1.getUri());
         assertEquals(1, requestLine1.getVersion().getMajorVersion());
@@ -19,19 +22,26 @@ class RequestLineTest {
         assertEquals(requestLineArgument1, requestLine1.toString());
 
         String requestLineArgument2 = "HEAD / HTTP/33.20" + HttpConstants.CR + HttpConstants.LF;
-        RequestLine requestLine2 = new RequestLine(requestLineArgument2);
+        RequestLine requestLine2 = initializeRequestLine(stringToBytesArray(requestLineArgument2));
         assertEquals("HEAD", requestLine2.getMethod());
         assertEquals("/", requestLine2.getUri());
         assertEquals(33, requestLine2.getVersion().getMajorVersion());
         assertEquals(20, requestLine2.getVersion().getMinorVersion());
         assertEquals(requestLineArgument2, requestLine2.toString());
     }
-
     @Test
     void testInvalidRequestLineThrowsException() {
         String requestLineArgument = "GET / aösldkfj23234420";
         assertThrows(InvalidRequest.class, () -> {
-            new RequestLine(requestLineArgument);
+            initializeRequestLine(stringToBytesArray(requestLineArgument));
         });
+    }
+
+    private static byte[] stringToBytesArray(String s) {
+        byte[] byteArray = new byte[s.length()];
+        for (int i = 0; i < byteArray.length; i++) {
+            byteArray[i] = (byte) s.charAt(i);
+        }
+        return byteArray;
     }
 }

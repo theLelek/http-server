@@ -11,41 +11,13 @@ public class RequestLine {
     private final String uri;
     private final Version version;
 
-    public RequestLine(String method, String uri, int majorVersion, int minorVersion) {
+    public RequestLine(String method, String uri, Version version) {
         this.method = method;
         this.uri = uri; // TODO implement Uri class
-        this.version = new Version(majorVersion, minorVersion);
+        this.version = version;
     }
 
-    public RequestLine(String requestLine) throws InvalidRequest {
-        if (requestLine == null) {
-            throw new InvalidRequest(400, "Bad Request", "invalid Request", "requestLine is null");
-        }
-        requestLine = requestLine.trim();
-        try {
-            String[] parts = requestLine.split(" ");
-            this.method = parts[0];
-            isMethodAllowed(method);
-            this.uri = parts[1];
-            String httpVersion = parts[2];
-
-            String[] httpVersionParts = httpVersion.split("/");
-            String versionNumbers = httpVersionParts[1]; // eg. = "1.1"
-            String[] versionNumberParts = versionNumbers.split("\\.");
-            int majorVersion = Integer.parseInt(versionNumberParts[0]);
-            int minorVersion = Integer.parseInt(versionNumberParts[1]);
-            version = new Version(majorVersion, minorVersion);
-        }
-
-        catch (Exception ex) {
-            if (!(ex instanceof InvalidRequest)) {
-                throw new InvalidRequest(400, "Bad Request", "invalid Request", "RequestLine bytes couldn't be parsed");
-            }
-            throw ex;
-        }
-   }
-
-   public static void isMethodAllowed(String method) throws InvalidRequest {
+   public static void isMethodAllowed(String method) {
         if (! Arrays.asList(HttpConstants.knownMethods).contains(method)) {
             throw new InvalidRequest(501, "Not Implemented", "invalid Request", "Request method is not known (known methods can be changed in parser.HttpConstants)");
         }

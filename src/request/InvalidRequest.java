@@ -1,6 +1,6 @@
 package request;
 
-public class InvalidRequest extends Exception {
+public class InvalidRequest extends RuntimeException {
 
     private final int statusCode;
     private final String reasonPhrase;

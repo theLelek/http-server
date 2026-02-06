@@ -1,7 +1,6 @@
 package request;
 
 import request.model.Request;
-import request.parser.RequestParser;
 import tcp.Tcp;
 
 public class RequestHandler implements Runnable {
