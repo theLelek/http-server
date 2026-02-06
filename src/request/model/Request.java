@@ -21,4 +21,11 @@ public class Request {
     public HashMap<String, String> getRequestHeaders() {
         return requestHeaders;
     }
+
+    @Override
+    public String toString() {
+        assert requestHeaders != null;
+        assert requestLine != null;
+        return requestLine.toString() + "\n" + requestHeaders.toString();
+    }
 }
