@@ -1,7 +1,7 @@
 package request.parser;
 
 import request.HttpConstants;
-import request.exceptions.InvalidRequest;
+import request.InvalidRequest;
 import request.model.Request;
 import request.model.RequestLine;
 
@@ -11,6 +11,9 @@ public class RequestParser {
         String stringRequest = everythingToString(requestBytes);
         RequestLine requestLine = new RequestLine(getRequestLine(requestBytes)); // ignores leading whitespaces
         System.out.println(requestLine);
+        System.out.println(stringRequest);
+
+        String requestHead = getRequestHead(requestBytes);
 
         return null;
     }
@@ -26,6 +29,12 @@ public class RequestParser {
             requestLine.append((char) requestBytes[i]);
         }
         return requestLine.toString();
+    }
+
+    private static String getRequestHead(byte[] requestBytes) throws InvalidRequest {
+        String stringRequest = everythingToString(requestBytes);
+        String[] parts =  stringRequest.split(String.valueOf(HttpConstants.CR + HttpConstants.LF));
+        return null;
     }
 
     public static String everythingToString(byte[] request) {

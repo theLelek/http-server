@@ -1,10 +1,15 @@
 package request.model;
 
+import java.util.HashMap;
+
 public class Request {
 
-    RequestLine requestLine;
+    private final RequestLine requestLine;
+    private final HashMap<String,String> requestHeaders;
 
 
-
-
+    public Request(RequestLine requestLine, HashMap<String, String> requestHeaders) {
+        this.requestLine = requestLine;
+        this.requestHeaders = requestHeaders;
+    }
 }

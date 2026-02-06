@@ -1,7 +1,6 @@
 package request;
 
 import org.junit.jupiter.api.Test;
-import request.exceptions.InvalidRequest;
 import request.model.RequestLine;
 //import request.parser.AnsiConstants;
 

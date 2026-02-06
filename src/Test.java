@@ -1,5 +1,4 @@
-import request.exceptions.InvalidRequest;
-import java.util.Arrays;
+import request.InvalidRequest;
 
 public class Test {
     public static void main(String[] args) throws InvalidRequest {

@@ -25,9 +25,9 @@ public class Main {
         }
     }
 
-    public static byte[] removeElements(byte[] arr1, int index) { // index is the index from whhich removing should start
-        byte[] arr2 = new byte[index];
-        for (int i = 0; i < index; i++) {
+    public static byte[] removeElements(byte[] arr1, int start) {
+        byte[] arr2 = new byte[start];
+        for (int i = 0; i < start; i++) {
             arr2[i] = arr1[i];
         }
         return arr2;

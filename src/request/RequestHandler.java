@@ -1,6 +1,5 @@
 package request;
 
-import request.exceptions.InvalidRequest;
 import request.model.Request;
 import request.parser.RequestParser;
 import tcp.Tcp;
@@ -23,12 +22,5 @@ public class RequestHandler implements Runnable {
             return;
         }
 //        System.out.println(RequestParser.everythingToString(requestBytes));
-        try {
-            Thread.sleep(10000000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-
     }
 }

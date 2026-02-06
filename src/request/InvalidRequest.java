@@ -1,4 +1,4 @@
-package request.exceptions;
+package request;
 
 public class InvalidRequest extends Exception {
 

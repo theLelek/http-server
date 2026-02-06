@@ -1,6 +1,6 @@
 package request.model;
 
-import request.exceptions.InvalidRequest;
+import request.InvalidRequest;
 import request.HttpConstants;
 
 import java.util.Arrays;
