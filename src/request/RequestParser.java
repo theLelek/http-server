@@ -14,12 +14,12 @@ public class RequestParser {
         String stringRequest = everythingToString(requestBytes);
         RequestLine requestLine = initializeRequestLine(requestBytes); // ignores leading whitespaces
         HashMap<String, String> requestHeaders = initializeRequestHeaders(requestBytes);
-        System.out.println(requestHeaders);
+//        System.out.println(requestHeaders);
 
 //        System.out.println(requestLine);
         System.out.println(stringRequest);
 
-        return null;
+        return new Request(requestLine, requestHeaders);
     }
 
     public static RequestLine initializeRequestLine(byte[] requestBytes) {
@@ -69,9 +69,14 @@ public class RequestParser {
     }
 
     private static HashMap<String, String> initializeRequestHeaders(byte[] requestBytes) {
-        String requestHeaders = bytesToStringRequestHeaders(requestBytes);
-        return null;
-
+        HashMap<String, String> requestHeaders = new HashMap<>();
+        String requestHeadersString = bytesToStringRequestHeaders(requestBytes);
+        String[] requestHeadersLines = requestHeadersString.split("\r\n");
+        for (String requestHeader : requestHeadersLines) {
+            String[] parts = requestHeader.split(": ");
+            requestHeaders.put(parts[0], parts[1]);
+        }
+        return requestHeaders;
     }
 
     public static String bytesToStringRequestHeaders(byte[] requestBytes) {
