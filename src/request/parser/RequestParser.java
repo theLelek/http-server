@@ -7,6 +7,8 @@ import request.model.RequestLine;
 
 public class RequestParser {
 
+    // TODO move some invalid Request logic outside of parser
+
     public static Request parseRequest(byte[] requestBytes) throws InvalidRequest {
         String stringRequest = everythingToString(requestBytes);
         RequestLine requestLine = new RequestLine(getRequestLine(requestBytes)); // ignores leading whitespaces
