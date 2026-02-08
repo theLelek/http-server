@@ -5,14 +5,12 @@ public class InvalidRequest extends RuntimeException {
     private final int statusCode;
     private final String reasonPhrase;
     private final String clientMessage;
-    private final String debugMessage;
 
     public InvalidRequest(int statusCode, String reasonPhrase, String clientMessage, String debugMessage) {
-//        super(clientMessage);
+        super(debugMessage);
         this.statusCode = statusCode;
         this.reasonPhrase = reasonPhrase;
         this.clientMessage = clientMessage;
-        this.debugMessage = debugMessage;
     }
 
     public int getStatusCode() {

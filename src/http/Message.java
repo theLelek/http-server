@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 abstract public class Message {
 
-    private final StartLine startLine;
-    private final HashMap<String, String> requestHeaders;
-    private final String body;
+    protected final StartLine startLine;
+    protected final HashMap<String, String> requestHeaders;
+    protected final String body;
 
     public Message(StartLine startLine, HashMap<String, String> requestHeaders, String body) {
         this.startLine = startLine;

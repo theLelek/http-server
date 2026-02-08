@@ -2,7 +2,7 @@ package http;
 
 abstract public class StartLine {
 
-    private final Version version;
+    protected final Version version;
 
     public StartLine(Version version) {
         this.version = version;

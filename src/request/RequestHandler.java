@@ -17,7 +17,9 @@ public class RequestHandler implements Runnable {
     @Override
     public void run() {
         try {
-            Request request = RequestParser.parseRequest(requestBytes);
+            RequestParser requestParser = new RequestParser(requestBytes);
+            Request request = requestParser.parseRequest();
+
         } catch (InvalidRequest e) {
             return;
         }

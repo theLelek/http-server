@@ -1,4 +1,4 @@
-GET / HTTP/2.1
+HEAD / HTTP/33.20
 Host: example.com
 Sec-Ch-Ua: "Not=A?Brand";v="24", "Chromium";v="140"
 Sec-Ch-Ua-Mobile: ?0
