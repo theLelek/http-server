@@ -11,4 +11,11 @@ public class RequestUri { // TODO implement RequestUri class
     public String getRequestUri() {
         return requestUri;
     }
+
+    @Override
+    public String toString() {
+        return "RequestUri{" +
+                "requestUri='" + requestUri + '\'' +
+                '}';
+    }
 }

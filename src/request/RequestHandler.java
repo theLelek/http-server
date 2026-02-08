@@ -1,5 +1,6 @@
 package request;
 
+import http.InvalidRequest;
 import request.model.Request;
 import tcp.Tcp;
 

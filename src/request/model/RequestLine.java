@@ -1,23 +1,24 @@
 package request.model;
 
-import request.InvalidRequest;
-import request.HttpConstants;
+import http.StartLine;
+import http.Version;
+import http.InvalidRequest;
+import http.HttpConstants;
 
 import java.util.Arrays;
 
-public class RequestLine {
+public class RequestLine extends StartLine {
 
     private final String method;
     private final String uri;
-    private final Version version;
 
     public RequestLine(String method, String uri, Version version) {
+        super(version);
         this.method = method;
         this.uri = uri; // TODO implement Uri class
-        this.version = version;
     }
 
-   public static void isMethodAllowed(String method) {
+   public static void isMethodAllowed(String method) { // TODO move somewhere else
         if (! Arrays.asList(HttpConstants.knownMethods).contains(method)) {
             throw new InvalidRequest(501, "Not Implemented", "invalid Request", "Request method is not known (known methods can be changed in parser.HttpConstants)");
         }
@@ -34,12 +35,8 @@ public class RequestLine {
         return uri;
     }
 
-    public Version getVersion() {
-        return version;
-    }
-
     @Override
     public String toString() {
-        return String.format("%s %s HTTP/%d.%d" + HttpConstants.CR + HttpConstants.LF, method, uri, version.getMajorVersion(), version.getMinorVersion());
+        return String.format("%s %s HTTP/%d.%d" + HttpConstants.CR + HttpConstants.LF, method, uri, super.getVersion().getMajorVersion(), super.getVersion().getMinorVersion());
     }
 }

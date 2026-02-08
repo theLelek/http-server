@@ -1,8 +1,10 @@
 package request;
 
+import http.HttpConstants;
+import http.InvalidRequest;
 import request.model.Request;
 import request.model.RequestLine;
-import request.model.Version;
+import http.Version;
 
 import java.util.HashMap;
 
@@ -19,7 +21,11 @@ public class RequestParser {
 //        System.out.println(requestLine);
         System.out.println(stringRequest);
 
-        return new Request(requestLine, requestHeaders);
+        if (requestLine.getMethod().equals("POST") || requestLine.getMethod().equals("")) { // methods that have a body
+
+        }
+
+        return new Request(requestLine, requestHeaders, "body");
     }
 
     public static RequestLine initializeRequestLine(byte[] requestBytes) {
@@ -68,13 +74,13 @@ public class RequestParser {
         return requestLine.toString();
     }
 
-    private static HashMap<String, String> initializeRequestHeaders(byte[] requestBytes) {
+    public static HashMap<String, String> initializeRequestHeaders(byte[] requestBytes) { // TODO The field value MAY be preceded by any amount of LWS
         HashMap<String, String> requestHeaders = new HashMap<>();
         String requestHeadersString = bytesToStringRequestHeaders(requestBytes);
         String[] requestHeadersLines = requestHeadersString.split("\r\n");
         for (String requestHeader : requestHeadersLines) {
             String[] parts = requestHeader.split(": ");
-            requestHeaders.put(parts[0], parts[1]);
+            requestHeaders.put(parts[0].toLowerCase(), parts[1]);
         }
         return requestHeaders;
     }
@@ -94,7 +100,7 @@ public class RequestParser {
         return requestHeader.toString();
     }
 
-    private static String everythingToString(byte[] request) {
+    public static String everythingToString(byte[] request) {
         StringBuilder out = new StringBuilder();
         for (byte b : request) {
             out.append((char) b);

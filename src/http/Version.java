@@ -1,4 +1,4 @@
-package request.model;
+package http;
 
 public class Version {
 
@@ -16,5 +16,13 @@ public class Version {
 
     public int getMinorVersion() {
         return minorVersion;
+    }
+
+    @Override
+    public String toString() {
+        return "Version{" +
+                "majorVersion=" + majorVersion +
+                ", minorVersion=" + minorVersion +
+                '}';
     }
 }

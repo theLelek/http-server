@@ -1,31 +1,13 @@
 package request.model;
 
+import http.Message;
+
 import java.util.HashMap;
 
-public class Request {
+public class Request extends Message {
 
-    private final RequestLine requestLine;
-    private final HashMap<String, String> requestHeaders;
+    public Request(RequestLine requestLine, HashMap<String, String> requestHeaders, String body) {
+        super(requestLine, requestHeaders, body);
 
-
-    public Request(RequestLine requestLine, HashMap<String, String> requestHeaders) {
-        this.requestLine = requestLine;
-        this.requestHeaders = requestHeaders;
-    }
-
-    public Request(byte[] byteRequest) {
-        this.requestLine = null;
-        this.requestHeaders = null;
-    }
-
-    public HashMap<String, String> getRequestHeaders() {
-        return requestHeaders;
-    }
-
-    @Override
-    public String toString() {
-        assert requestHeaders != null;
-        assert requestLine != null;
-        return requestLine.toString() + "\n" + requestHeaders.toString();
     }
 }
