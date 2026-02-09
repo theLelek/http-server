@@ -1,8 +1,9 @@
+package dev.lelek;
+
 import java.net.*;
 import java.io.*;
 
-import request.RequestHandler;
-import tcp.Tcp;
+import dev.lelek.request.RequestHandler;
 
 public class Main {
     public static void main(String[] args) throws IOException {

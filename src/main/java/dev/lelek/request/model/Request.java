@@ -1,6 +1,6 @@
-package request.model;
+package dev.lelek.request.model;
 
-import http.Message;
+import dev.lelek.http.Message;
 
 import java.util.HashMap;
 

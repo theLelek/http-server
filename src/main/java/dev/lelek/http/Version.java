@@ -1,4 +1,4 @@
-package http;
+package dev.lelek.http;
 
 public class Version {
 

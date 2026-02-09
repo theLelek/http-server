@@ -1,4 +1,4 @@
-package http;
+package dev.lelek.http;
 
 import java.util.HashMap;
 
@@ -8,6 +8,7 @@ abstract public class HttpParser {
     protected final String stringRequest;
     protected final int requestHeaderStart;
     protected final int requestHeaderEnd;
+    protected final int requestBodyStart;
 
     public HttpParser(byte[] requestBytes) {
         this.requestBytes = requestBytes;
@@ -15,7 +16,11 @@ abstract public class HttpParser {
         this.requestHeaderStart = 2 + HttpParser.firstIndexOf(requestBytes, new byte[] {HttpConstants.CR});
         this.requestHeaderEnd = 1 + HttpParser.firstIndexOf(requestBytes, new byte[] {HttpConstants.CR, HttpConstants.LF, HttpConstants.CR, HttpConstants.LF});
         if (requestHeaderStart - 2 == -1 || requestHeaderEnd - 1 == -1) {
-            throw new InvalidRequest(400, "Bad Request", "invalid Request", "HttpParser object cannot be instantiated because requestHeader isn't correct");
+            throw new InvalidRequest(400, "Bad Request", "invalid Request", "HttpParser object cannot be instantiated because dev.lelek.request header cannot be found");
+        }
+        this.requestBodyStart = 4 + HttpParser.firstIndexOf(requestBytes, new byte[] {HttpConstants.CR, HttpConstants.LF, HttpConstants.CR, HttpConstants.LF});
+        if (requestBodyStart - 4 == -1) {
+            throw new InvalidRequest(400, "Bad Request", "invalid Request", "HttpParser object cannot be instantiated because dev.lelek.request body cannot be found isn't correct");
         }
     }
 
@@ -25,7 +30,7 @@ abstract public class HttpParser {
         byte[] toFind = {HttpConstants.CR};
         int crlfIndex = HttpParser.firstIndexOf(requestBytes, toFind);
         if (crlfIndex == -1) {
-            throw new InvalidRequest(400, "Bad Request", "invalid Request", "CR not contained in request");
+            throw new InvalidRequest(400, "Bad Request", "invalid Request", "CR not contained in dev.lelek.request");
         }
         StringBuilder requestLine = new StringBuilder();
         for (int i = 0; i < crlfIndex + 2; i++) {
@@ -34,7 +39,17 @@ abstract public class HttpParser {
         return requestLine.toString();
     }
 
-    public HashMap<String, String> initializeRequestHeaders() { // TODO The field value MAY be preceded by any amount of LWS
+    public String getStringBody() {
+        StringBuilder body = new StringBuilder();
+        for (int i = requestBodyStart; i < requestBytes.length; i++) {
+            char currentChar = (char) requestBytes[i];
+            body.append(currentChar);
+        }
+        body = body.delete(body.length() - 2, body.length()); // TODO not sure if - 2 is correct
+        return body.toString();
+    }
+
+    public HashMap<String, String> getRequestHeaders() { // TODO The field value MAY be preceded by any amount of LWS
         HashMap<String, String> requestHeaders = new HashMap<>();
         String requestHeadersString = getStringRequestHeaders();
         String[] requestHeadersLines = requestHeadersString.split("\r\n");
@@ -45,19 +60,12 @@ abstract public class HttpParser {
         return requestHeaders;
     }
 
-    protected String getStringRequestHeaders() {
+    private String getStringRequestHeaders() {
         StringBuilder requestHeader = new StringBuilder();
         for (int i = requestHeaderStart; i <= requestHeaderEnd ; i++) {
             requestHeader.append((char) requestBytes[i]);
         }
         return requestHeader.toString();
-    }
-
-
-
-    protected String bytesToStringBody() {
-
-        return null;
     }
 
     public static String everythingToString(byte[] request) {

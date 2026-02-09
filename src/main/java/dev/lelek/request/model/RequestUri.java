@@ -1,4 +1,4 @@
-package request.model;
+package dev.lelek.request.model;
 
 public class RequestUri { // TODO implement RequestUri class
 

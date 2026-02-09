@@ -1,9 +1,9 @@
-package request.model;
+package dev.lelek.request.model;
 
-import http.StartLine;
-import http.Version;
-import http.InvalidRequest;
-import http.HttpConstants;
+import dev.lelek.http.StartLine;
+import dev.lelek.http.Version;
+import dev.lelek.http.InvalidRequest;
+import dev.lelek.http.HttpConstants;
 
 import java.util.Arrays;
 

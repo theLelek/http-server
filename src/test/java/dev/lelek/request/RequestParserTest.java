@@ -1,9 +1,9 @@
-package request;
+package dev.lelek.request;
 
-import http.HttpConstants;
-import http.InvalidRequest;
+import dev.lelek.http.HttpConstants;
+import dev.lelek.http.InvalidRequest;
 import org.junit.jupiter.api.Test;
-import request.model.RequestLine;
+import dev.lelek.request.model.RequestLine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 
 public class RequestParserTest {
 
@@ -19,7 +18,7 @@ public class RequestParserTest {
     @Test
     void getRequestLineTest() throws IOException {
         String requestLineArgument1 = "GET / HTTP/2.1" + HttpConstants.CR + HttpConstants.LF;
-        RequestParser requestParser1 = new RequestParser(fileToByteArray("test/standardRequest.txt"));
+        RequestParser requestParser1 = new RequestParser(fileToByteArray("src/test/java/standardRequest.txt"));
         RequestLine requestLine1 = requestParser1.getRequestLine();
         assertEquals("GET", requestLine1.getMethod());
         assertEquals("/", requestLine1.getUri());
@@ -28,7 +27,7 @@ public class RequestParserTest {
         assertEquals(requestLineArgument1, requestLine1.toString());
 
         String requestLineArgument2 = "HEAD / HTTP/33.20" + HttpConstants.CR + HttpConstants.LF;
-        RequestParser requestParser2 = new RequestParser(fileToByteArray("test/standardRequest2.txt"));
+        RequestParser requestParser2 = new RequestParser(fileToByteArray("src/test/java/standardRequest2.txt"));
         RequestLine requestLine2 = requestParser2.getRequestLine();
         assertEquals("HEAD", requestLine2.getMethod());
         assertEquals("/", requestLine2.getUri());

@@ -1,4 +1,4 @@
-package tcp;
+package dev.lelek;
 
 import java.net.*;
 import java.io.*;

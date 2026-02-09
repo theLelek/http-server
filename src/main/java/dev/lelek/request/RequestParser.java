@@ -1,11 +1,10 @@
-package request;
+package dev.lelek.request;
 
-import http.HttpConstants;
-import http.HttpParser;
-import http.InvalidRequest;
-import request.model.Request;
-import request.model.RequestLine;
-import http.Version;
+import dev.lelek.http.HttpParser;
+import dev.lelek.http.InvalidRequest;
+import dev.lelek.request.model.Request;
+import dev.lelek.request.model.RequestLine;
+import dev.lelek.http.Version;
 
 import java.util.HashMap;
 
@@ -18,21 +17,19 @@ public class RequestParser extends HttpParser { // TODO move some invalid Reques
     @Override
     public Request parseRequest() {
         String stringRequest = HttpParser.everythingToString(requestBytes);
-        RequestLine requestLine = initializeRequestLine(); // ignores leading whitespaces
-        HashMap<String, String> requestHeaders = initializeRequestHeaders();
+        RequestLine requestLine = getRequestLine(); // ignores leading whitespaces
+        HashMap<String, String> requestHeaders = getRequestHeaders();
 //        System.out.println(requestHeaders);
 
 //        System.out.println(requestLine);
         System.out.println(stringRequest);
-        String body = super.bytesToStringBody();
+        String body = super.getStringBody();
 
 
-
-
-        return new Request(requestLine, requestHeaders, "body");
+        return new Request(requestLine, requestHeaders, body);
     }
 
-    public RequestLine initializeRequestLine() {
+    public RequestLine getRequestLine() {
         String requestLine = getStringStartLine();
         requestLine = requestLine.trim();
         String method;
