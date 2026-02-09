@@ -4,7 +4,7 @@ import java.net.*;
 import java.io.*;
 
 import dev.lelek.request.RequestHandler;
-
+// TODO make class for header fields
 public class Main {
     public static void main(String[] args) throws IOException {
         Tcp connections = new Tcp(8080);
