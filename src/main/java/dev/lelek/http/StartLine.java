@@ -2,7 +2,7 @@ package dev.lelek.http;
 
 abstract public class StartLine {
 
-    protected final Version version;
+    private final Version version;
 
     public StartLine(Version version) {
         this.version = version;

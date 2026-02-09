@@ -16,16 +16,10 @@ public class RequestParser extends HttpParser { // TODO move some invalid Reques
 
     @Override
     public Request parseRequest() {
-        String stringRequest = HttpParser.everythingToString(requestBytes);
+        String stringRequest = HttpParser.everythingToString(this.getRequestBytes());
         RequestLine requestLine = getRequestLine(); // ignores leading whitespaces
         HashMap<String, String> requestHeaders = getRequestHeaders();
-//        System.out.println(requestHeaders);
-
-//        System.out.println(requestLine);
-        System.out.println(stringRequest);
         String body = super.getStringBody();
-
-
         return new Request(requestLine, requestHeaders, body);
     }
 
@@ -38,7 +32,6 @@ public class RequestParser extends HttpParser { // TODO move some invalid Reques
         try {
             String[] parts = requestLine.split(" ");
             method = parts[0];
-//            isMethodAllowed(method); TODO move somewhere else
             uri = parts[1];
             String httpVersion = parts[2];
 

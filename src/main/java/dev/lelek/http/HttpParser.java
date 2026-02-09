@@ -4,11 +4,11 @@ import java.util.HashMap;
 
 abstract public class HttpParser {
 
-    protected final byte[] requestBytes;
-    protected final String stringRequest;
-    protected final int requestHeaderStart;
-    protected final int requestHeaderEnd;
-    protected final int requestBodyStart;
+    private final byte[] requestBytes;
+    private final String stringRequest;
+    private final int requestHeaderStart;
+    private final int requestHeaderEnd;
+    private final int requestBodyStart;
 
     public HttpParser(byte[] requestBytes) {
         this.requestBytes = requestBytes;
@@ -26,7 +26,7 @@ abstract public class HttpParser {
 
     abstract public Message parseRequest();
 
-    protected String getStringStartLine() {
+    public String getStringStartLine() {
         byte[] toFind = {HttpConstants.CR};
         int crlfIndex = HttpParser.firstIndexOf(requestBytes, toFind);
         if (crlfIndex == -1) {
@@ -92,5 +92,25 @@ abstract public class HttpParser {
             }
         }
         return -1;
+    }
+
+    public byte[] getRequestBytes() {
+        return requestBytes;
+    }
+
+    public String getStringRequest() {
+        return stringRequest;
+    }
+
+    public int getRequestHeaderStart() {
+        return requestHeaderStart;
+    }
+
+    public int getRequestHeaderEnd() {
+        return requestHeaderEnd;
+    }
+
+    public int getRequestBodyStart() {
+        return requestBodyStart;
     }
 }

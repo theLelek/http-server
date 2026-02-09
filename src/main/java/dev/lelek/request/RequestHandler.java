@@ -1,5 +1,6 @@
 package dev.lelek.request;
 
+import dev.lelek.Validator;
 import dev.lelek.http.InvalidRequest;
 import dev.lelek.request.model.Request;
 import dev.lelek.Tcp;
@@ -17,14 +18,10 @@ public class RequestHandler implements Runnable {
 
     @Override
     public void run() {
-        try {
-            RequestParser requestParser = new RequestParser(requestBytes);
-            Request request = requestParser.parseRequest();
-//            dev.lelek.Validator validator = new dev.lelek.Validator(dev.lelek.request);
-
-        } catch (InvalidRequest e) {
-            return;
-        }
+        RequestParser requestParser = new RequestParser(requestBytes);
+        Request request = requestParser.parseRequest();
+        Validator validator = new Validator(request);
+        validator.validate();
 //        System.out.println(RequestParser.everythingToString(requestBytes));
     }
 }

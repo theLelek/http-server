@@ -21,7 +21,7 @@ class HttpParserTest {
 
     @Test
     void getRequestHeadersTest() throws IOException {
-        byte[] b = fileToByteArray("src/test/java/standardRequest.txt");
+        byte[] b = fileToByteArray("src/test/java/request_get.txt");
         RequestParser requestParser = new RequestParser(b);
         HashMap<String, String> headers = requestParser.getRequestHeaders();
         assertEquals(headers.get("host"), "example.com");

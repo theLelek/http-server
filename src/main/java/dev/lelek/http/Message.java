@@ -4,29 +4,26 @@ import java.util.HashMap;
 
 abstract public class Message {
 
-    protected final StartLine startLine;
-    protected final HashMap<String, String> requestHeaders;
-    protected final String body;
+    private final HashMap<String, String> requestHeaders;
+    private final String body;
 
-    public Message(StartLine startLine, HashMap<String, String> requestHeaders, String body) {
-        this.startLine = startLine;
+    public Message(HashMap<String, String> requestHeaders, String body) {
         this.requestHeaders = requestHeaders;
         this.body = body;
-    }
-
-    public StartLine getStartLine() {
-        return startLine;
     }
 
     public HashMap<String, String> getRequestHeaders() {
         return requestHeaders;
     }
 
+    public String getBody() {
+        return body;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
-                "startLine=" + startLine +
-                ", requestHeaders=" + requestHeaders +
+                "requestHeaders=" + requestHeaders +
                 ", body='" + body + '\'' +
                 '}';
     }

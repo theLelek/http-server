@@ -18,7 +18,7 @@ public class RequestParserTest {
     @Test
     void getRequestLineTest() throws IOException {
         String requestLineArgument1 = "GET / HTTP/2.1" + HttpConstants.CR + HttpConstants.LF;
-        RequestParser requestParser1 = new RequestParser(fileToByteArray("src/test/java/standardRequest.txt"));
+        RequestParser requestParser1 = new RequestParser(fileToByteArray("src/test/java/request_get.txt"));
         RequestLine requestLine1 = requestParser1.getRequestLine();
         assertEquals("GET", requestLine1.getMethod());
         assertEquals("/", requestLine1.getUri());
