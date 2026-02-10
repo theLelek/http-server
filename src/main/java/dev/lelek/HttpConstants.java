@@ -1,4 +1,4 @@
-package dev.lelek.http;
+package dev.lelek;
 
 public class HttpConstants {
 

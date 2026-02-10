@@ -1,7 +1,7 @@
 package dev.lelek.request;
 
-import dev.lelek.http.HttpConstants;
-import dev.lelek.http.InvalidRequest;
+import dev.lelek.HttpConstants;
+import dev.lelek.InvalidRequest;
 import org.junit.jupiter.api.Test;
 import dev.lelek.request.model.RequestLine;
 
@@ -16,10 +16,10 @@ public class RequestParserTest {
 
 
     @Test
-    void getRequestLineTest() throws IOException {
+    void parseRequestLineTest() throws IOException {
         String requestLineArgument1 = "GET / HTTP/2.1" + HttpConstants.CR + HttpConstants.LF;
         RequestParser requestParser1 = new RequestParser(fileToByteArray("src/test/java/request_get.txt"));
-        RequestLine requestLine1 = requestParser1.getRequestLine();
+        RequestLine requestLine1 = requestParser1.parseRequestLine();
         assertEquals("GET", requestLine1.getMethod());
         assertEquals("/", requestLine1.getUri());
         assertEquals(2, requestLine1.getVersion().getMajorVersion());
@@ -28,7 +28,7 @@ public class RequestParserTest {
 
         String requestLineArgument2 = "HEAD / HTTP/33.20" + HttpConstants.CR + HttpConstants.LF;
         RequestParser requestParser2 = new RequestParser(fileToByteArray("src/test/java/standardRequest2.txt"));
-        RequestLine requestLine2 = requestParser2.getRequestLine();
+        RequestLine requestLine2 = requestParser2.parseRequestLine();
         assertEquals("HEAD", requestLine2.getMethod());
         assertEquals("/", requestLine2.getUri());
         assertEquals(33, requestLine2.getVersion().getMajorVersion());

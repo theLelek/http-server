@@ -1,5 +1,8 @@
 package dev.lelek.http;
 
+import dev.lelek.HttpConstants;
+import dev.lelek.InvalidRequest;
+
 import java.util.*;
 
 abstract public class HttpParser { // TODO dont like structure / function names of HttpParser / RequestParser

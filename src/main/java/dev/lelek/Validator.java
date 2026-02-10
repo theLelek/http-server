@@ -1,7 +1,5 @@
 package dev.lelek;
 
-import dev.lelek.http.HttpConstants;
-import dev.lelek.http.InvalidRequest;
 import dev.lelek.request.model.Request;
 
 import java.util.Arrays;

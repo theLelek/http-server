@@ -1,7 +1,6 @@
 package dev.lelek.request;
 
 import dev.lelek.Validator;
-import dev.lelek.http.InvalidRequest;
 import dev.lelek.request.model.Request;
 import dev.lelek.Tcp;
 

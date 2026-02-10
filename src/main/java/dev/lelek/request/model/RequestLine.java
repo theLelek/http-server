@@ -1,18 +1,16 @@
 package dev.lelek.request.model;
 
+import dev.lelek.http.RequestUri;
 import dev.lelek.http.StartLine;
 import dev.lelek.http.Version;
-import dev.lelek.http.InvalidRequest;
-import dev.lelek.http.HttpConstants;
-
-import java.util.Arrays;
+import dev.lelek.HttpConstants;
 
 public class RequestLine extends StartLine {
 
     private final String method;
-    private final String uri; // TODO implement Uri class
+    private final RequestUri uri; // TODO implement Uri class
 
-    public RequestLine(String method, String uri, Version version) {
+    public RequestLine(String method, RequestUri uri, Version version) {
         super(version);
         this.method = method;
         this.uri = uri;
@@ -22,7 +20,7 @@ public class RequestLine extends StartLine {
         return method;
     }
 
-    public String getUri() {
+    public RequestUri getUri() {
         return uri;
     }
 
