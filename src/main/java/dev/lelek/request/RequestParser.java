@@ -6,9 +6,10 @@ import dev.lelek.request.model.Request;
 import dev.lelek.request.model.RequestLine;
 import dev.lelek.http.Version;
 
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class RequestParser extends HttpParser { // TODO move some invalid Request logic outside of parser
+public class RequestParser extends HttpParser {
 
     public RequestParser(byte[] requestBytes) {
         super(requestBytes);
@@ -18,7 +19,7 @@ public class RequestParser extends HttpParser { // TODO move some invalid Reques
     public Request parseRequest() {
         String stringRequest = HttpParser.everythingToString(this.getRequestBytes());
         RequestLine requestLine = getRequestLine(); // ignores leading whitespaces
-        HashMap<String, String> requestHeaders = getRequestHeaders();
+        Map<String, List<String>> requestHeaders = getRequestHeaders();
         String body = super.getStringBody();
         return new Request(requestLine, requestHeaders, body);
     }

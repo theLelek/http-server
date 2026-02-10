@@ -10,12 +10,12 @@ import java.util.Arrays;
 public class RequestLine extends StartLine {
 
     private final String method;
-    private final String uri;
+    private final String uri; // TODO implement Uri class
 
     public RequestLine(String method, String uri, Version version) {
         super(version);
         this.method = method;
-        this.uri = uri; // TODO implement Uri class
+        this.uri = uri;
     }
 
     public String getMethod() {

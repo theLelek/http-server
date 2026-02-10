@@ -4,12 +4,14 @@ import dev.lelek.http.Message;
 import dev.lelek.http.StartLine;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Request extends Message {
 
     private final RequestLine requestLine;
 
-    public Request(RequestLine requestLine, HashMap<String, String> requestHeaders, String body) {
+    public Request(RequestLine requestLine, Map<String, List<String>> requestHeaders, String body) {
         super(requestHeaders, body);
         this.requestLine = requestLine;
 

@@ -1,8 +1,8 @@
 package dev.lelek.http;
 
-import java.util.HashMap;
+import java.util.*;
 
-abstract public class HttpParser {
+abstract public class HttpParser { // TODO dont like structure / function names of HttpParser / RequestParser
 
     private final byte[] requestBytes;
     private final String stringRequest;
@@ -49,18 +49,27 @@ abstract public class HttpParser {
         return body.toString();
     }
 
-    public HashMap<String, String> getRequestHeaders() { // TODO The field value MAY be preceded by any amount of LWS
-        HashMap<String, String> requestHeaders = new HashMap<>();
-        String requestHeadersString = getStringRequestHeaders();
-        String[] requestHeadersLines = requestHeadersString.split("\r\n");
-        for (String requestHeader : requestHeadersLines) {
-            String[] parts = requestHeader.split(": ");
-            requestHeaders.put(parts[0].toLowerCase(), parts[1]);
+    public Map<String, List<String>> getRequestHeaders() {
+        Map<String, List<String>> requestHeaders = new LinkedHashMap<>();
+        String unfolded = getStringRequestHeaders().replaceAll("\r\n[ \t]+", " ");
+        String[] lines = unfolded.split("\r\n");
+
+        for (String line : lines) {
+            if (line.isEmpty()) continue;
+            int colon = line.indexOf(':');
+            if (colon <= 0) {
+                continue;
+            }
+            String name = line.substring(0, colon).trim().toLowerCase(Locale.ROOT);
+            String value = line.substring(colon + 1).trim();
+            requestHeaders
+                    .computeIfAbsent(name, k -> new ArrayList<>())
+                    .add(value);
         }
         return requestHeaders;
     }
 
-    private String getStringRequestHeaders() {
+    public String getStringRequestHeaders() {
         StringBuilder requestHeader = new StringBuilder();
         for (int i = requestHeaderStart; i <= requestHeaderEnd ; i++) {
             requestHeader.append((char) requestBytes[i]);
