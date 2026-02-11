@@ -1,4 +1,4 @@
-package dev.lelek.http;
+package dev.lelek.request.model;
 
 abstract public class RequestUri {
 

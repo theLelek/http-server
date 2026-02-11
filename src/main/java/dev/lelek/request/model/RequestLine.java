@@ -1,6 +1,5 @@
 package dev.lelek.request.model;
 
-import dev.lelek.http.RequestUri;
 import dev.lelek.http.StartLine;
 import dev.lelek.http.Version;
 import dev.lelek.HttpConstants;
