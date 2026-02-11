@@ -5,6 +5,7 @@ import dev.lelek.InvalidRequest;
 import dev.lelek.request.model.Request;
 import dev.lelek.request.model.RequestLine;
 import dev.lelek.http.Version;
+import dev.lelek.request.model.uri.AbsoluteForm;
 import dev.lelek.request.model.uri.OriginForm;
 import dev.lelek.request.model.uri.RequestTarget;
 import dev.lelek.request.model.uri.AsteriskForm;
@@ -81,15 +82,17 @@ public class RequestParser {
     public RequestTarget parseRequestTarget() {
         if (stringUri.equals("*")) {
             return new AsteriskForm();
+        } else if (stringUri.contains("http")) {
+            return parseAbsoluteForm();
         }
-        return parseOriginForm();
+        return parseAbsoluteForm();
     }
 
-    public OriginForm parseOriginForm() {
+    public AbsoluteForm parseAbsoluteForm() {
         String[] originFormParts = stringUri.split("\\?");
         String absolutePath = originFormParts[0];
         if (originFormParts.length == 1) {
-            return new OriginForm(stringUri, absolutePath);
+            return new AbsoluteForm(stringUri, absolutePath);
         }
         int queriesEndIndex = originFormParts[1].indexOf("#");
         if (queriesEndIndex == -1) {
@@ -101,7 +104,7 @@ public class RequestParser {
             String[] parts = keyValuePair.split("=");
             queries.put(parts[0], parts[1]);
         }
-        return new OriginForm(stringUri, absolutePath, queries);
+        return new AbsoluteForm(stringUri, absolutePath, queries);
     }
 
     private Version parseHttpVersion() {

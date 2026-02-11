@@ -2,6 +2,7 @@ package dev.lelek.request;
 
 import dev.lelek.HttpConstants;
 import dev.lelek.InvalidRequest;
+import dev.lelek.request.model.uri.AbsoluteForm;
 import dev.lelek.request.model.uri.OriginForm;
 import org.junit.jupiter.api.Test;
 import dev.lelek.request.model.RequestLine;
@@ -19,14 +20,14 @@ import java.util.Map;
 public class RequestParserTest {
 
     @Test
-    void parseOriginForm() {
+    void parseAbsoluteForm() {
         String absolutePath1 = "http://www.example.com:80/path/to/myfile.html";
         String queries1 = "?key1=value1&key2=value2#SomewhereInTheDocument";
         HashMap<String, String> mapQueries1 = new HashMap<>();
         mapQueries1.put("key1", "value1");
         mapQueries1.put("key2", "value2");
         RequestParser requestParser1 = new RequestParser(null, -1, -1, -1, null, null, null, absolutePath1 + queries1, null);
-        OriginForm originForm1 = requestParser1.parseOriginForm();
+        AbsoluteForm originForm1 = requestParser1.parseAbsoluteForm();
 
         assertEquals(absolutePath1 + queries1, originForm1.getRaw());
         assertEquals(mapQueries1, originForm1.getQueries());
@@ -34,7 +35,7 @@ public class RequestParserTest {
 
         String absolutePath2 = "http://www.example.com:80/path/to/myfile.html";
         RequestParser requestParser2 = new RequestParser(null, -1, -1, -1, null, null, null, absolutePath2, null);
-        OriginForm originForm2 = requestParser2.parseOriginForm();
+        AbsoluteForm originForm2 = requestParser2.parseAbsoluteForm();
         assertEquals(absolutePath2, originForm2.getRaw());
 
         assertEquals(absolutePath2, originForm2.getAbsolutePath());
