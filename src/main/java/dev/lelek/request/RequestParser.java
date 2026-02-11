@@ -208,4 +208,16 @@ public class RequestParser {
     public int getRequestBodyStart() {
         return requestBodyStart;
     }
+
+    public String getStringMethod() {
+        return stringMethod;
+    }
+
+    public String getStringUri() {
+        return stringUri;
+    }
+
+    public String getStringHttpVersion() {
+        return stringHttpVersion;
+    }
 }
