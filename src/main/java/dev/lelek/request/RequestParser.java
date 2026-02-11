@@ -5,6 +5,7 @@ import dev.lelek.InvalidRequest;
 import dev.lelek.request.model.Request;
 import dev.lelek.request.model.RequestLine;
 import dev.lelek.http.Version;
+import dev.lelek.request.model.uri.OriginForm;
 import dev.lelek.request.model.uri.RequestTarget;
 import dev.lelek.request.model.uri.AsteriskForm;
 
@@ -48,7 +49,7 @@ public class RequestParser {
         try {
             String[] parts = requestLine.split(" ");
             method = parts[0];
-            uri = parseRequestUri(parts[1]);
+            uri = parseRequestTarget(parts[1]);
             httpVersion = parseHttpVersion(parts[2]);
        } catch (Exception ex) {
             if (! (ex instanceof InvalidRequest)) {
@@ -59,15 +60,30 @@ public class RequestParser {
         return new RequestLine(method, uri, httpVersion);
     }
 
-    private RequestTarget parseRequestUri(String stringRequestUri) {
+    public static RequestTarget parseRequestTarget(String stringRequestUri) {
         if (stringRequestUri.equals("*")) {
             return new AsteriskForm();
         }
-
-
-
-
         return null;
+    }
+
+    public static OriginForm parseOriginForm(String stringOriginForm) {
+        String[] originFormParts = stringOriginForm.split("\\?");
+        String absolutePath = originFormParts[1];
+        if (originFormParts.length == 1) {
+            return new OriginForm(stringOriginForm, absolutePath);
+        }
+        int queriesEndIndex = originFormParts[1].indexOf("#");
+        if (queriesEndIndex == -1) {
+            queriesEndIndex = stringOriginForm.length();
+        }
+        String stringQueries = originFormParts[1].substring(0, queriesEndIndex);
+        HashMap<String, String> queries = new HashMap<>();
+        for (String keyValuePair : stringQueries.split("&")) {
+            String[] parts = keyValuePair.split("=");
+            queries.put(parts[0], parts[1]);
+        }
+        return new OriginForm(stringOriginForm, absolutePath, queries);
     }
 
     private static Version parseHttpVersion(String httpVersion) {

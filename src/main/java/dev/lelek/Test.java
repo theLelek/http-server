@@ -4,8 +4,9 @@ import java.util.Arrays;
 
 public class Test {
     public static void main(String[] args) {
+        String s = "hallo?hi";
+        String[] parts = s.split("\\?");
+        System.out.println();
 
-        int[] arr = {56,1,4,56,23};
-        System.out.println(Arrays.toString(arr));
     }
 }

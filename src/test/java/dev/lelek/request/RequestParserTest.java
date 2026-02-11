@@ -2,6 +2,7 @@ package dev.lelek.request;
 
 import dev.lelek.HttpConstants;
 import dev.lelek.InvalidRequest;
+import dev.lelek.request.model.uri.OriginForm;
 import org.junit.jupiter.api.Test;
 import dev.lelek.request.model.RequestLine;
 
@@ -11,11 +12,25 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class RequestParserTest {
 
+
+    @Test
+    void parseOriginForm() {
+        String url = "http://www.example.com:80/path/to/myfile.html?key1=value1&key2=value2#SomewhereInTheDocument";
+        HashMap<String, String> mapQueries = new HashMap<>();
+        mapQueries.put("key1", "value1");
+        mapQueries.put("key2", "value2");
+
+        OriginForm originForm = RequestParser.parseOriginForm(url);
+        assertEquals(url, originForm.getRaw());
+        assertEquals(mapQueries, originForm.getQueries());
+
+    }
 
     @Test
     void parseRequestLineTest() throws IOException {
@@ -74,4 +89,5 @@ public class RequestParserTest {
     public static byte[] fileToByteArray(String path) throws IOException {
         return Files.readAllBytes(Path.of(path));
     }
+
 }
