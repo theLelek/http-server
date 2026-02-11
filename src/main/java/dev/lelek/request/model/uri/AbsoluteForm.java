@@ -5,23 +5,23 @@ import java.util.Map;
 
 public class AbsoluteForm extends RequestTarget {
 
-    private final String absolutePath; // TODO create class for absolutePath
+    private final String uriWithoutQuery; // TODO create class for absolutePath
     private final Map<String, String> queries;
 
-    public AbsoluteForm(String raw, String absolutePath, Map<String, String> queries) {
+    public AbsoluteForm(String raw, String uriWithoutQuery, Map<String, String> queries) {
         super(raw);
-        this.absolutePath = absolutePath;
+        this.uriWithoutQuery = uriWithoutQuery;
         this.queries = queries;
     }
 
-    public AbsoluteForm(String raw, String absolutePath) {
+    public AbsoluteForm(String raw, String uriWithoutQuery) {
         super(raw);
-        this.absolutePath = absolutePath;
+        this.uriWithoutQuery = uriWithoutQuery;
         this.queries = new HashMap<>();
     }
 
-    public String getAbsolutePath() {
-        return absolutePath;
+    public String getUriWithoutQuery() {
+        return uriWithoutQuery;
     }
 
     public Map<String, String> getQueries() {

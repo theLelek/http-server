@@ -8,24 +8,24 @@ import dev.lelek.request.model.uri.RequestTarget;
 public class RequestLine extends StartLine {
 
     private final String method;
-    private final RequestTarget uri;
+    private final RequestTarget requestTarget;
 
-    public RequestLine(String method, RequestTarget uri, Version version) {
+    public RequestLine(String method, RequestTarget requestTarget, Version version) {
         super(version);
         this.method = method;
-        this.uri = uri;
+        this.requestTarget = requestTarget;
     }
 
     public String getMethod() {
         return method;
     }
 
-    public RequestTarget getUri() {
-        return uri;
+    public RequestTarget getRequestTarget() {
+        return requestTarget;
     }
 
     @Override
     public String toString() {
-        return String.format("%s %s HTTP/%d.%d" + HttpConstants.CR + HttpConstants.LF, method, uri, super.getVersion().getMajorVersion(), super.getVersion().getMinorVersion());
+        return String.format("%s %s HTTP/%d.%d" + HttpConstants.CR + HttpConstants.LF, method, requestTarget, super.getVersion().getMajorVersion(), super.getVersion().getMinorVersion());
     }
 }

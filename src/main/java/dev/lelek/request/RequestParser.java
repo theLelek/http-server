@@ -5,10 +5,7 @@ import dev.lelek.InvalidRequest;
 import dev.lelek.request.model.Request;
 import dev.lelek.request.model.RequestLine;
 import dev.lelek.http.Version;
-import dev.lelek.request.model.uri.AbsoluteForm;
-import dev.lelek.request.model.uri.OriginForm;
-import dev.lelek.request.model.uri.RequestTarget;
-import dev.lelek.request.model.uri.AsteriskForm;
+import dev.lelek.request.model.uri.*;
 
 import java.util.*;
 
@@ -22,7 +19,7 @@ public class RequestParser {
     private final String rawString;
     private final String stringRequestLine;
     private final String stringMethod;
-    private final String stringUri;
+    private final String stringRequestTarget;
     private final String stringHttpVersion;
 
 
@@ -42,7 +39,7 @@ public class RequestParser {
             stringRequestLine = getStringRequestLine().trim();
             String[] parts = stringRequestLine.split(" ");
             this.stringMethod = parts[0];
-            this.stringUri = parts[1];
+            this.stringRequestTarget = parts[1];
             this.stringHttpVersion = parts[2];
 
         } catch (Exception e) {
@@ -53,7 +50,7 @@ public class RequestParser {
         }
     }
 
-    public RequestParser(byte[] rawBytes, int requestHeaderStart, int requestHeaderEnd, int requestBodyStart, String rawString, String stringRequestLine, String stringMethod, String stringUri, String stringHttpVersion) {
+    public RequestParser(byte[] rawBytes, int requestHeaderStart, int requestHeaderEnd, int requestBodyStart, String rawString, String stringRequestLine, String stringMethod, String stringRequestTarget, String stringHttpVersion) {
         this.rawBytes = rawBytes;
         this.requestHeaderStart = requestHeaderStart;
         this.requestHeaderEnd = requestHeaderEnd;
@@ -61,7 +58,7 @@ public class RequestParser {
         this.rawString = rawString;
         this.stringRequestLine = stringRequestLine;
         this.stringMethod = stringMethod;
-        this.stringUri = stringUri;
+        this.stringRequestTarget = stringRequestTarget;
         this.stringHttpVersion = stringHttpVersion;
     }
 
@@ -80,31 +77,58 @@ public class RequestParser {
     }
 
     public RequestTarget parseRequestTarget() {
-        if (stringUri.equals("*")) {
+        if (stringRequestTarget.equals("*")) {
             return new AsteriskForm();
-        } else if (stringUri.contains("http")) {
+        } else if (stringRequestTarget.contains("http")) {
             return parseAbsoluteForm();
+        } else if (stringRequestTarget.charAt(0) == '/') {
+            return parseOriginForm();
+        } else {
+            return parseAuthorityForm();
         }
-        return parseAbsoluteForm();
+    }
+
+    public OriginForm parseOriginForm() {
+        String[] originFormParts = stringRequestTarget.split("\\?", 2); // queries only begin after ?
+        String absolutePath = originFormParts[0];
+        if (originFormParts.length == 1) {
+            return new OriginForm(stringRequestTarget, absolutePath);
+        }
+        int queriesEndIndex = originFormParts[1].indexOf("#"); // queries end at either # or end of String
+        if (queriesEndIndex == -1) {
+            queriesEndIndex = originFormParts[1].length();
+        }
+        String stringQueries = originFormParts[1].substring(0, queriesEndIndex);
+        Map<String, String> queries = parseQueries(stringQueries);
+        return new OriginForm(stringRequestTarget, absolutePath, queries);
     }
 
     public AbsoluteForm parseAbsoluteForm() {
-        String[] originFormParts = stringUri.split("\\?");
-        String absolutePath = originFormParts[0];
-        if (originFormParts.length == 1) {
-            return new AbsoluteForm(stringUri, absolutePath);
+        String[] absoluteFormParts = stringRequestTarget.split("\\?", 2); // queries only begin after ?
+        String uriWithoutQuery = absoluteFormParts[0];
+        if (absoluteFormParts.length == 1) {
+            return new AbsoluteForm(stringRequestTarget, uriWithoutQuery);
         }
-        int queriesEndIndex = originFormParts[1].indexOf("#");
+        int queriesEndIndex = absoluteFormParts[1].indexOf("#"); // queries end at either # or end of String
         if (queriesEndIndex == -1) {
-            queriesEndIndex = stringUri.length();
+            queriesEndIndex = stringRequestTarget.length();
         }
-        String stringQueries = originFormParts[1].substring(0, queriesEndIndex);
-        HashMap<String, String> queries = new HashMap<>();
+        String stringQueries = absoluteFormParts[1].substring(0, queriesEndIndex);
+        Map<String, String> queries = parseQueries(stringQueries);
+        return new AbsoluteForm(stringRequestTarget, uriWithoutQuery, queries);
+    }
+
+    public AuthorityForm parseAuthorityForm() {
+        return null;
+    }
+
+    private static Map<String, String> parseQueries(String stringQueries) {
+        Map<String, String> queries = new HashMap<>();
         for (String keyValuePair : stringQueries.split("&")) {
             String[] parts = keyValuePair.split("=");
             queries.put(parts[0], parts[1]);
         }
-        return new AbsoluteForm(stringUri, absolutePath, queries);
+        return queries;
     }
 
     private Version parseHttpVersion() {
@@ -216,8 +240,8 @@ public class RequestParser {
         return stringMethod;
     }
 
-    public String getStringUri() {
-        return stringUri;
+    public String getStringRequestTarget() {
+        return stringRequestTarget;
     }
 
     public String getStringHttpVersion() {

@@ -1,13 +1,14 @@
 package dev.lelek.request.model.uri;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class OriginForm extends RequestTarget {
 
     private final String absolutePath; // TODO create class for absolutePath
-    HashMap<String, String> queries;
+    Map<String, String> queries;
 
-    public OriginForm(String raw, String absolutePath, HashMap<String, String> queries) {
+    public OriginForm(String raw, String absolutePath, Map<String, String> queries) {
         super(raw);
         this.absolutePath = absolutePath;
         this.queries = queries;
@@ -23,7 +24,7 @@ public class OriginForm extends RequestTarget {
         return absolutePath;
     }
 
-    public HashMap<String, String> getQueries() {
+    public Map<String, String> getQueries() {
         return queries;
     }
 }
