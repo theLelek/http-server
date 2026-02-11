@@ -2,12 +2,14 @@ package dev.lelek.http;
 
 public class Version {
 
+    private final String httpName;
     private final int majorVersion;
     private final int minorVersion;
 
-    public Version(int majorVersion, int minorVersion) {
+    public Version(String httpName, int majorVersion, int minorVersion) {
         this.majorVersion = majorVersion;
         this.minorVersion = minorVersion;
+        this.httpName = httpName;
     }
 
     public int getMajorVersion() {
@@ -24,5 +26,9 @@ public class Version {
                 "majorVersion=" + majorVersion +
                 ", minorVersion=" + minorVersion +
                 '}';
+    }
+
+    public String getHttpName() {
+        return httpName;
     }
 }

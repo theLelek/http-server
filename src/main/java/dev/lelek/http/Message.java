@@ -5,10 +5,12 @@ import java.util.Map;
 
 abstract public class Message {
 
+    private final byte[] rawBytes;
     private final Map<String, List<String>> requestHeaders;
     private final String body;
 
-    public Message(Map<String, List<String>> requestHeaders, String body) {
+    public Message(byte[] rawBytes, Map<String, List<String>> requestHeaders, String body) {
+        this.rawBytes = rawBytes;
         this.requestHeaders = requestHeaders;
         this.body = body;
     }
@@ -27,5 +29,9 @@ abstract public class Message {
                 "requestHeaders=" + requestHeaders +
                 ", body='" + body + '\'' +
                 '}';
+    }
+
+    public byte[] getRawBytes() {
+        return rawBytes;
     }
 }
