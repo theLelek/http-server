@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class OriginForm extends RequestTarget {
 
-    private final String absolutePath;
+    private final String absolutePath; // TODO create class for absolutePath
     HashMap<String, String> queries;
 
     public OriginForm(String raw, String absolutePath, HashMap<String, String> queries) {

@@ -11,6 +11,11 @@ abstract public class RequestTarget {
     public String getRaw() {
         return raw;
     }
+
+    @Override
+    public String toString() {
+        return raw;
+    }
 }
 
 

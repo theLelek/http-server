@@ -18,18 +18,28 @@ import java.util.Map;
 
 public class RequestParserTest {
 
-
     @Test
     void parseOriginForm() {
-        String url = "http://www.example.com:80/path/to/myfile.html?key1=value1&key2=value2#SomewhereInTheDocument";
-        HashMap<String, String> mapQueries = new HashMap<>();
-        mapQueries.put("key1", "value1");
-        mapQueries.put("key2", "value2");
+        String absolutePath1 = "http://www.example.com:80/path/to/myfile.html";
+        String queries1 = "?key1=value1&key2=value2#SomewhereInTheDocument";
+        HashMap<String, String> mapQueries1 = new HashMap<>();
+        mapQueries1.put("key1", "value1");
+        mapQueries1.put("key2", "value2");
+        RequestParser requestParser1 = new RequestParser(null, -1, -1, -1, null, null, null, absolutePath1 + queries1, null);
+        OriginForm originForm1 = requestParser1.parseOriginForm();
 
-        OriginForm originForm = RequestParser.parseOriginForm(url);
-        assertEquals(url, originForm.getRaw());
-        assertEquals(mapQueries, originForm.getQueries());
+        assertEquals(absolutePath1 + queries1, originForm1.getRaw());
+        assertEquals(mapQueries1, originForm1.getQueries());
+        assertEquals(absolutePath1, originForm1.getAbsolutePath());
 
+        String absolutePath2 = "http://www.example.com:80/path/to/myfile.html";
+        RequestParser requestParser2 = new RequestParser(null, -1, -1, -1, null, null, null, absolutePath2, null);
+        OriginForm originForm2 = requestParser2.parseOriginForm();
+        assertEquals(absolutePath2, originForm2.getRaw());
+
+        assertEquals(absolutePath2, originForm2.getAbsolutePath());
+        assertEquals(absolutePath2, originForm2.getRaw());
+        assertEquals(0, originForm2.getQueries().size());
     }
 
     @Test
@@ -38,7 +48,7 @@ public class RequestParserTest {
         RequestParser requestParser1 = new RequestParser(fileToByteArray("src/test/java/request_get.txt"));
         RequestLine requestLine1 = requestParser1.parseRequestLine();
         assertEquals("GET", requestLine1.getMethod());
-        assertEquals("/", requestLine1.getUri());
+        assertEquals("/", requestLine1.getUri().toString());
         assertEquals(2, requestLine1.getVersion().getMajorVersion());
         assertEquals(1, requestLine1.getVersion().getMinorVersion());
         assertEquals(requestLineArgument1, requestLine1.toString());
@@ -47,7 +57,7 @@ public class RequestParserTest {
         RequestParser requestParser2 = new RequestParser(fileToByteArray("src/test/java/standardRequest2.txt"));
         RequestLine requestLine2 = requestParser2.parseRequestLine();
         assertEquals("HEAD", requestLine2.getMethod());
-        assertEquals("/", requestLine2.getUri());
+        assertEquals("/", requestLine2.getUri().toString());
         assertEquals(33, requestLine2.getVersion().getMajorVersion());
         assertEquals(20, requestLine2.getVersion().getMinorVersion());
         assertEquals(requestLineArgument2, requestLine2.toString());
@@ -59,7 +69,6 @@ public class RequestParserTest {
                 InvalidRequest.class,
                 () -> new RequestParser(stringToByteArray(requestLineArgument))
         );    }
-
 
     @Test
     void getStringBody() throws IOException {
@@ -89,5 +98,4 @@ public class RequestParserTest {
     public static byte[] fileToByteArray(String path) throws IOException {
         return Files.readAllBytes(Path.of(path));
     }
-
 }

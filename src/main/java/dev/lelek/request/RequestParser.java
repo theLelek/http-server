@@ -13,28 +13,59 @@ import java.util.*;
 
 public class RequestParser {
 
-    private final byte[] raw;
-    private final String stringRequest;
+    private final byte[] rawBytes;
     private final int requestHeaderStart;
     private final int requestHeaderEnd;
     private final int requestBodyStart;
 
-    public RequestParser(byte[] raw) {
-        this.raw = raw;
-        this.stringRequest = everythingToString(raw);
-        this.requestHeaderStart = 2 + firstIndexOf(raw, new byte[] {HttpConstants.CR});
-        this.requestHeaderEnd = 1 + firstIndexOf(raw, new byte[] {HttpConstants.CR, HttpConstants.LF, HttpConstants.CR, HttpConstants.LF});
+    private final String rawString;
+    private final String stringRequestLine;
+    private final String stringMethod;
+    private final String stringUri;
+    private final String stringHttpVersion;
+
+
+    public RequestParser(byte[] rawBytes) {
+        this.rawBytes = rawBytes;
+        this.rawString = everythingToString(rawBytes);
+        this.requestHeaderStart = 2 + firstIndexOf(rawBytes, new byte[] {HttpConstants.CR});
+        this.requestHeaderEnd = 1 + firstIndexOf(rawBytes, new byte[] {HttpConstants.CR, HttpConstants.LF, HttpConstants.CR, HttpConstants.LF});
         if (requestHeaderStart - 2 == -1 || requestHeaderEnd - 1 == -1) {
             throw new InvalidRequest(400, "Bad Request", "invalid Request", "HttpParser object cannot be instantiated because dev.lelek.request header cannot be found");
         }
-        this.requestBodyStart = 4 + firstIndexOf(raw, new byte[] {HttpConstants.CR, HttpConstants.LF, HttpConstants.CR, HttpConstants.LF});
+        this.requestBodyStart = 4 + firstIndexOf(rawBytes, new byte[] {HttpConstants.CR, HttpConstants.LF, HttpConstants.CR, HttpConstants.LF});
         if (requestBodyStart - 4 == -1) {
             throw new InvalidRequest(400, "Bad Request", "invalid Request", "HttpParser object cannot be instantiated because dev.lelek.request body cannot be found isn't correct");
         }
+        try {
+            stringRequestLine = getStringRequestLine().trim();
+            String[] parts = stringRequestLine.split(" ");
+            this.stringMethod = parts[0];
+            this.stringUri = parts[1];
+            this.stringHttpVersion = parts[2];
+
+        } catch (Exception e) {
+            if (! (e instanceof InvalidRequest)) {
+                throw new InvalidRequest(400, "Bad Request", "invalid Request", "RequestLine bytes couldn't be parsed");
+            }
+            throw e;
+        }
+    }
+
+    public RequestParser(byte[] rawBytes, int requestHeaderStart, int requestHeaderEnd, int requestBodyStart, String rawString, String stringRequestLine, String stringMethod, String stringUri, String stringHttpVersion) {
+        this.rawBytes = rawBytes;
+        this.requestHeaderStart = requestHeaderStart;
+        this.requestHeaderEnd = requestHeaderEnd;
+        this.requestBodyStart = requestBodyStart;
+        this.rawString = rawString;
+        this.stringRequestLine = stringRequestLine;
+        this.stringMethod = stringMethod;
+        this.stringUri = stringUri;
+        this.stringHttpVersion = stringHttpVersion;
     }
 
     public Request parseRequest() {
-        String stringRequest = everythingToString(this.getRaw());
+        String stringRequest = everythingToString(rawBytes);
         RequestLine requestLine = parseRequestLine(); // ignores leading whitespaces
         Map<String, List<String>> requestHeaders = parseRequestHeaders();
         String body = getStringBody();
@@ -42,40 +73,27 @@ public class RequestParser {
     }
 
     public RequestLine parseRequestLine() {
-        String requestLine = getStringStartLine().trim();
-        String method;
-        RequestTarget uri;
-        Version httpVersion;
-        try {
-            String[] parts = requestLine.split(" ");
-            method = parts[0];
-            uri = parseRequestTarget(parts[1]);
-            httpVersion = parseHttpVersion(parts[2]);
-       } catch (Exception ex) {
-            if (! (ex instanceof InvalidRequest)) {
-                throw new InvalidRequest(400, "Bad Request", "invalid Request", "RequestLine bytes couldn't be parsed");
-            }
-            throw ex;
-        }
-        return new RequestLine(method, uri, httpVersion);
+        RequestTarget requestTarget = parseRequestTarget();
+        Version version = parseHttpVersion();
+        return new RequestLine(stringMethod, requestTarget, version);
     }
 
-    public static RequestTarget parseRequestTarget(String stringRequestUri) {
-        if (stringRequestUri.equals("*")) {
+    public RequestTarget parseRequestTarget() {
+        if (stringUri.equals("*")) {
             return new AsteriskForm();
         }
-        return null;
+        return parseOriginForm();
     }
 
-    public static OriginForm parseOriginForm(String stringOriginForm) {
-        String[] originFormParts = stringOriginForm.split("\\?");
-        String absolutePath = originFormParts[1];
+    public OriginForm parseOriginForm() {
+        String[] originFormParts = stringUri.split("\\?");
+        String absolutePath = originFormParts[0];
         if (originFormParts.length == 1) {
-            return new OriginForm(stringOriginForm, absolutePath);
+            return new OriginForm(stringUri, absolutePath);
         }
         int queriesEndIndex = originFormParts[1].indexOf("#");
         if (queriesEndIndex == -1) {
-            queriesEndIndex = stringOriginForm.length();
+            queriesEndIndex = stringUri.length();
         }
         String stringQueries = originFormParts[1].substring(0, queriesEndIndex);
         HashMap<String, String> queries = new HashMap<>();
@@ -83,11 +101,11 @@ public class RequestParser {
             String[] parts = keyValuePair.split("=");
             queries.put(parts[0], parts[1]);
         }
-        return new OriginForm(stringOriginForm, absolutePath, queries);
+        return new OriginForm(stringUri, absolutePath, queries);
     }
 
-    private static Version parseHttpVersion(String httpVersion) {
-        String[] httpVersionParts = httpVersion.split("/");
+    private Version parseHttpVersion() {
+        String[] httpVersionParts = stringHttpVersion.split("/");
         String versionNumbers = httpVersionParts[1]; // eg. = "1.1"
         String[] versionNumberParts = versionNumbers.split("\\.");
         int majorVersion = Integer.parseInt(versionNumberParts[0]);
@@ -115,15 +133,15 @@ public class RequestParser {
         return requestHeaders;
     }
 
-    public String getStringStartLine() {
+    public String getStringRequestLine() {
         byte[] toFind = {HttpConstants.CR};
-        int crlfIndex = firstIndexOf(raw, toFind);
+        int crlfIndex = firstIndexOf(rawBytes, toFind);
         if (crlfIndex == -1) {
             throw new InvalidRequest(400, "Bad Request", "invalid Request", "CR not contained in dev.lelek.request");
         }
         StringBuilder requestLine = new StringBuilder();
         for (int i = 0; i < crlfIndex + 2; i++) {
-            requestLine.append((char) raw[i]);
+            requestLine.append((char) rawBytes[i]);
         }
         return requestLine.toString();
     }
@@ -131,15 +149,15 @@ public class RequestParser {
     public String getStringRequestHeaders() {
         StringBuilder requestHeader = new StringBuilder();
         for (int i = requestHeaderStart; i <= requestHeaderEnd ; i++) {
-            requestHeader.append((char) raw[i]);
+            requestHeader.append((char) rawBytes[i]);
         }
         return requestHeader.toString();
     }
 
     public String getStringBody() {
         StringBuilder body = new StringBuilder();
-        for (int i = requestBodyStart; i < raw.length; i++) {
-            char currentChar = (char) raw[i];
+        for (int i = requestBodyStart; i < rawBytes.length; i++) {
+            char currentChar = (char) rawBytes[i];
             body.append(currentChar);
         }
         body = body.delete(body.length() - 2, body.length()); // TODO not sure if - 2 is correct
@@ -171,12 +189,12 @@ public class RequestParser {
         return -1;
     }
 
-    public byte[] getRaw() {
-        return raw;
+    public byte[] getRawBytes() {
+        return rawBytes;
     }
 
-    public String getStringRequest() {
-        return stringRequest;
+    public String getRawString() {
+        return rawString;
     }
 
     public int getRequestHeaderStart() {

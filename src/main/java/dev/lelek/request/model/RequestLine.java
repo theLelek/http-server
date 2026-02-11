@@ -8,7 +8,7 @@ import dev.lelek.request.model.uri.RequestTarget;
 public class RequestLine extends StartLine {
 
     private final String method;
-    private final RequestTarget uri; // TODO implement Uri class
+    private final RequestTarget uri;
 
     public RequestLine(String method, RequestTarget uri, Version version) {
         super(version);
