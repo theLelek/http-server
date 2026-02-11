@@ -5,7 +5,8 @@ import dev.lelek.InvalidRequest;
 import dev.lelek.request.model.Request;
 import dev.lelek.request.model.RequestLine;
 import dev.lelek.http.Version;
-import dev.lelek.request.model.RequestUri;
+import dev.lelek.request.model.uri.RequestTarget;
+import dev.lelek.request.model.uri.AsteriskForm;
 
 import java.util.*;
 
@@ -42,7 +43,7 @@ public class RequestParser {
     public RequestLine parseRequestLine() {
         String requestLine = getStringStartLine().trim();
         String method;
-        RequestUri uri;
+        RequestTarget uri;
         Version httpVersion;
         try {
             String[] parts = requestLine.split(" ");
@@ -58,10 +59,12 @@ public class RequestParser {
         return new RequestLine(method, uri, httpVersion);
     }
 
-    private RequestUri parseRequestUri(String stringRequestUri) {
+    private RequestTarget parseRequestUri(String stringRequestUri) {
         if (stringRequestUri.equals("*")) {
-            return null;
+            return new AsteriskForm();
         }
+
+
 
 
         return null;

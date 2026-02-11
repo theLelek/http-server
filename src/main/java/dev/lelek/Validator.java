@@ -14,6 +14,7 @@ public class Validator {
 
     public void validate() {
         isMethodAllowed();
+        validateHeaders();
 
     }
 
@@ -23,6 +24,12 @@ public class Validator {
         }
         if (! Arrays.asList(HttpConstants.implementedMethods).contains(request.getRequestLine().getMethod())) {
             throw new InvalidRequest(405, "method not allowed", "invalid Request", "Request method is not implemented (implemented methods can be changed in parser.HttpConstants)");
+        }
+    }
+
+    private void validateHeaders() {
+        if (! request.getRequestHeaders().containsKey("Host")) {
+            throw new InvalidRequest(400, "Bad Request", "invalid Request", "Host header is missing");
         }
     }
 

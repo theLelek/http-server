@@ -3,13 +3,14 @@ package dev.lelek.request.model;
 import dev.lelek.http.StartLine;
 import dev.lelek.http.Version;
 import dev.lelek.HttpConstants;
+import dev.lelek.request.model.uri.RequestTarget;
 
 public class RequestLine extends StartLine {
 
     private final String method;
-    private final RequestUri uri; // TODO implement Uri class
+    private final RequestTarget uri; // TODO implement Uri class
 
-    public RequestLine(String method, RequestUri uri, Version version) {
+    public RequestLine(String method, RequestTarget uri, Version version) {
         super(version);
         this.method = method;
         this.uri = uri;
@@ -19,7 +20,7 @@ public class RequestLine extends StartLine {
         return method;
     }
 
-    public RequestUri getUri() {
+    public RequestTarget getUri() {
         return uri;
     }
 
