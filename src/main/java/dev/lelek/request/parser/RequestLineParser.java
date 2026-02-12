@@ -83,7 +83,7 @@ class RequestLineParser {
         }
         int queriesEndIndex = absoluteFormParts[1].indexOf("#"); // queries end at either # or end of String
         if (queriesEndIndex == -1) {
-            queriesEndIndex = stringRequestTarget.length();
+            queriesEndIndex = absoluteFormParts[1].length();
         }
         String stringQueries = absoluteFormParts[1].substring(0, queriesEndIndex);
         Map<String, String> queries = parseQueries(stringQueries);

@@ -10,9 +10,6 @@ public class RequestParser {
         String stringRequest = everythingToString(requestBytes);
         RequestLine requestLine = RequestLineParser.parseRequestLine(requestBytes);
         Map<String, List<String>> requestHeaders = HeadersParser.parseHeaders(requestBytes);
-
-
-
 //        String body = getStringBody();
         return new Request(requestBytes, requestLine, requestHeaders, null);
     }

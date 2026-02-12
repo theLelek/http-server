@@ -26,6 +26,6 @@ public class RequestLine extends StartLine {
 
     @Override
     public String toString() {
-        return String.format("%s %s HTTP/%d.%d" + HttpConstants.CR + HttpConstants.LF, method, requestTarget, super.getVersion().getMajorVersion(), super.getVersion().getMinorVersion());
+        return String.format("%s %s HTTP/%d.%d" + HttpConstants.CR + HttpConstants.LF, method, requestTarget, getVersion().getMajorVersion(), getVersion().getMinorVersion()).trim();
     }
 }
