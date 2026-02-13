@@ -5,23 +5,23 @@ import java.util.Map;
 
 public class OriginForm extends RequestTarget {
 
-    private final String absolutePath; // TODO create class for absolutePath
+    private final String pathReference; // TODO create class for path Reference = relative path without queries
     Map<String, String> queries;
 
-    public OriginForm(String raw, String absolutePath, Map<String, String> queries) {
+    public OriginForm(String raw, String pathReference, Map<String, String> queries) {
         super(raw);
-        this.absolutePath = absolutePath;
+        this.pathReference = pathReference;
         this.queries = queries;
     }
 
-    public OriginForm(String raw, String absolutePath) {
+    public OriginForm(String raw, String pathReference) {
         super(raw);
-        this.absolutePath = absolutePath;
+        this.pathReference = pathReference;
         this.queries = new HashMap<>();
     }
 
-    public String getAbsolutePath() {
-        return absolutePath;
+    public String getPathReference() {
+        return pathReference;
     }
 
     public Map<String, String> getQueries() {

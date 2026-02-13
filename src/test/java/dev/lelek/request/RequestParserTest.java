@@ -37,7 +37,7 @@ public class RequestParserTest {
         actualQueries1.put("id", "10");
         actualQueries1.put("sort", "price");
         assertEquals("GET", request1.getRequestLine().getMethod());
-        assertEquals("/products?id=10&sort=price", request1.getRequestLine().getRequestTarget().getRaw());
+        assertEquals("/products?id=10&sort=price", request1.getRequestLine().getRequestTarget().getRawString());
         assertEquals(33, request1.getRequestLine().getVersion().getMajorVersion());
         assertEquals(20, request1.getRequestLine().getVersion().getMinorVersion());
         assertInstanceOf(OriginForm.class, request1.getRequestLine().getRequestTarget());
@@ -52,12 +52,14 @@ public class RequestParserTest {
         actualQueries1.put("id", "10");
         actualQueries1.put("sort", "price");
         assertEquals("GET", request1.getRequestLine().getMethod());
-        assertEquals("http://www.example.org/pub/WWW/TheProject.html?id=10&sort=price", request1.getRequestLine().getRequestTarget().getRaw());
+        assertEquals("http://www.example.org/pub/WWW/TheProject.html?id=10&sort=price", request1.getRequestLine().getRequestTarget().getRawString());
         assertEquals(99999999, request1.getRequestLine().getVersion().getMajorVersion());
         assertEquals(0, request1.getRequestLine().getVersion().getMinorVersion());
         assertInstanceOf(AbsoluteForm.class, request1.getRequestLine().getRequestTarget());
         AbsoluteForm parsedRequestTarget = (AbsoluteForm) request1.getRequestLine().getRequestTarget();
         assertEquals(actualQueries1, parsedRequestTarget.getQueries());
+        assertEquals("http", parsedRequestTarget.getScheme());
+        assertEquals("//www.example.org/pub/WWW/TheProject.html", parsedRequestTarget.getHierPart());
     }
 
     @Test
@@ -65,7 +67,7 @@ public class RequestParserTest {
         Request request1 = RequestParser.parseRequest(fileToByteArray("src/test/java/request_connect_authority_form_1.txt"));
         assertInstanceOf(AuthorityForm.class, request1.getRequestLine().getRequestTarget());
         AuthorityForm parsedRequestTarget = (AuthorityForm) request1.getRequestLine().getRequestTarget();
-        assertEquals("www.example.com:80", parsedRequestTarget.getRaw());
+        assertEquals("www.example.com:80", parsedRequestTarget.getRawString());
         assertEquals("www.example.com", parsedRequestTarget.getHost());
         assertEquals(80, parsedRequestTarget.getPort());
     }

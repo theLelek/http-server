@@ -78,8 +78,11 @@ class RequestLineParser {
     public AbsoluteForm parseAbsoluteForm() {
         String[] absoluteFormParts = stringRequestTarget.split("\\?", 2); // queries only begin after ?
         String uriWithoutQuery = absoluteFormParts[0];
+        String[] uriWithoutQueryParts = uriWithoutQuery.split(":");
+        String scheme = uriWithoutQueryParts[0];
+        String hierPart = uriWithoutQueryParts[1];
         if (absoluteFormParts.length == 1) {
-            return new AbsoluteForm(stringRequestTarget, uriWithoutQuery);
+            return new AbsoluteForm(stringRequestTarget, scheme, hierPart);
         }
         int queriesEndIndex = absoluteFormParts[1].indexOf("#"); // queries end at either # or end of String
         if (queriesEndIndex == -1) {
@@ -87,7 +90,7 @@ class RequestLineParser {
         }
         String stringQueries = absoluteFormParts[1].substring(0, queriesEndIndex);
         Map<String, String> queries = parseQueries(stringQueries);
-        return new AbsoluteForm(stringRequestTarget, uriWithoutQuery, queries);
+        return new AbsoluteForm(stringRequestTarget, scheme, hierPart, queries);
     }
 
     public AuthorityForm parseAuthorityForm() {

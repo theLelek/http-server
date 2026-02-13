@@ -2,19 +2,19 @@ package dev.lelek.request.model.uri;
 
 abstract public class RequestTarget {
 
-    private final String raw;
+    private final String rawString;
 
-    public RequestTarget(String raw) {
-        this.raw = raw;
+    public RequestTarget(String rawString) {
+        this.rawString = rawString;
     }
 
-    public String getRaw() {
-        return raw;
+    public String getRawString() {
+        return rawString;
     }
 
     @Override
     public String toString() {
-        return raw;
+        return rawString;
     }
 }
 

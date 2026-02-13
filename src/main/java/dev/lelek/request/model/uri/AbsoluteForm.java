@@ -3,28 +3,35 @@ package dev.lelek.request.model.uri;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AbsoluteForm extends RequestTarget {
+public class AbsoluteForm extends RequestTarget { // = absolute-URI
 
-    private final String uriWithoutQuery; // TODO create class for absolutePath
+    private final String scheme;
+    private final String hierPart; // TODO create class for uriWithoutQuery
     private final Map<String, String> queries;
 
-    public AbsoluteForm(String raw, String uriWithoutQuery, Map<String, String> queries) {
-        super(raw);
-        this.uriWithoutQuery = uriWithoutQuery;
+    public AbsoluteForm(String rawString, String scheme, String hierPart, Map<String, String> queries) {
+        super(rawString);
+        this.scheme = scheme;
+        this.hierPart = hierPart;
         this.queries = queries;
     }
 
-    public AbsoluteForm(String raw, String uriWithoutQuery) {
-        super(raw);
-        this.uriWithoutQuery = uriWithoutQuery;
+    public AbsoluteForm(String rawString, String scheme, String hierPart) {
+        super(rawString);
+        this.scheme = scheme;
+        this.hierPart = hierPart;
         this.queries = new HashMap<>();
     }
 
-    public String getUriWithoutQuery() {
-        return uriWithoutQuery;
+    public String getHierPart() {
+        return hierPart;
     }
 
     public Map<String, String> getQueries() {
         return queries;
+    }
+
+    public String getScheme() {
+        return scheme;
     }
 }
