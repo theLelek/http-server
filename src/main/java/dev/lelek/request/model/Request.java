@@ -11,10 +11,9 @@ public class Request extends Message {
 
     private final RequestLine requestLine;
 
-    public Request(byte[] rawBytes, RequestLine requestLine, Map<String, List<String>> requestHeaders, String body) {
-        super(rawBytes, requestHeaders, body);
+    public Request(byte[] rawBytes, String rawString, String body, Map<String, List<String>> requestHeaders, RequestLine requestLine) {
+        super(rawBytes, body, rawString, requestHeaders);
         this.requestLine = requestLine;
-
     }
 
     public RequestLine getRequestLine() {

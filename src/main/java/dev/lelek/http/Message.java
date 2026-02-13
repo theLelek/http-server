@@ -6,17 +6,23 @@ import java.util.Map;
 abstract public class Message {
 
     private final byte[] rawBytes;
-    private final Map<String, List<String>> requestHeaders;
+    private final String rawString;
     private final String body;
+    private final Map<String, List<String>> requestHeaders;
 
-    public Message(byte[] rawBytes, Map<String, List<String>> requestHeaders, String body) {
+    public Message(byte[] rawBytes, String rawString, String body, Map<String, List<String>> requestHeaders) {
         this.rawBytes = rawBytes;
-        this.requestHeaders = requestHeaders;
+        this.rawString = rawString;
         this.body = body;
+        this.requestHeaders = requestHeaders;
     }
 
     public Map<String, List<String>> getRequestHeaders() {
         return requestHeaders;
+    }
+
+    public String getRawString() {
+        return rawString;
     }
 
     public String getBody() {

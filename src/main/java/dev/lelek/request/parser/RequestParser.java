@@ -10,8 +10,10 @@ public class RequestParser {
         String stringRequest = everythingToString(requestBytes);
         RequestLine requestLine = RequestLineParser.parseRequestLine(requestBytes);
         Map<String, List<String>> requestHeaders = HeadersParser.parseHeaders(requestBytes);
-//        String body = getStringBody();
-        return new Request(requestBytes, requestLine, requestHeaders, null);
+
+        String body = null;
+
+        return new Request(requestBytes, stringRequest, body, requestHeaders, requestLine);
     }
 
     public static String everythingToString(byte[] request) {
@@ -22,7 +24,7 @@ public class RequestParser {
         return out.toString();
     }
 
-    public static String bytesToString(byte[] bytes, int from, int to) {
+    static String bytesToString(byte[] bytes, int from, int to) {
         StringBuilder out = new StringBuilder();
         for (int i = from; i <= to; i++) {
             out.append((char) bytes[i]);
@@ -30,7 +32,7 @@ public class RequestParser {
         return out.toString();
     }
 
-    public static int firstIndexOf(byte[] arr, byte[] toSearch) {
+    static int firstIndexOf(byte[] arr, byte[] toSearch) {
         // TODO can maybe be done faster
         for (int i = 0; i < arr.length - toSearch.length + 1; i++) {
             int matches = 0;
