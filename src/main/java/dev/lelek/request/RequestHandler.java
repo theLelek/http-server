@@ -18,7 +18,6 @@ public class RequestHandler implements Runnable {
 
     @Override
     public void run() {
-
         Request request = RequestParser.parseRequest(requestBytes);
         Validator validator = new Validator(request);
         validator.validate();

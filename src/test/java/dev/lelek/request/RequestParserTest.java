@@ -1,5 +1,7 @@
 package dev.lelek.request;
 
+import dev.lelek.ByteRequestUtils;
+import dev.lelek.InvalidRequest;
 import dev.lelek.request.model.Request;
 import dev.lelek.request.model.uri.AbsoluteForm;
 import dev.lelek.request.model.uri.AsteriskForm;
@@ -7,10 +9,7 @@ import dev.lelek.request.model.uri.AuthorityForm;
 import dev.lelek.request.model.uri.OriginForm;
 import dev.lelek.request.parser.RequestParser;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +19,7 @@ public class RequestParserTest {
 
     @Test
     void parseRequestTest() throws IOException {
-        Request request1 = RequestParser.parseRequest(fileToByteArray("src/test/java/request_get_origin_form_1.txt"));
+        Request request1 = RequestParser.parseRequest(ByteRequestUtils.fileToByteArray("src/test/java/valid_requests/request_get_origin_form_1.txt"));
         // TODO add header field tests
         assertEquals("GET", request1.getRequestLine().getMethod());
         assertEquals("/", request1.getRequestLine().getRequestTarget().toString());
@@ -32,7 +31,7 @@ public class RequestParserTest {
 
     @Test
     void parseRequestTest_queriesAndOriginForm() throws IOException {
-        Request request1 = RequestParser.parseRequest(fileToByteArray("src/test/java/request_get_with_queries_origin_form_1.txt"));
+        Request request1 = RequestParser.parseRequest(ByteRequestUtils.fileToByteArray("src/test/java/valid_requests/request_get_with_queries_origin_form_1.txt"));
         Map<String, String> actualQueries1 = new HashMap<>();
         actualQueries1.put("id", "10");
         actualQueries1.put("sort", "price");
@@ -47,7 +46,7 @@ public class RequestParserTest {
 
     @Test
     void parseRequestTest_queriesAndAbsoluteForm() throws IOException {
-        Request request1 = RequestParser.parseRequest(fileToByteArray("src/test/java/request_get_with_queries_absolute_form_1.txt"));
+        Request request1 = RequestParser.parseRequest(ByteRequestUtils.fileToByteArray("src/test/java/valid_requests/request_get_with_queries_absolute_form_1.txt"));
         Map<String, String> actualQueries1 = new HashMap<>();
         actualQueries1.put("id", "10");
         actualQueries1.put("sort", "price");
@@ -64,7 +63,7 @@ public class RequestParserTest {
 
     @Test
     void parseRequestTest_authorityForm() throws IOException {
-        Request request1 = RequestParser.parseRequest(fileToByteArray("src/test/java/request_connect_authority_form_1.txt"));
+        Request request1 = RequestParser.parseRequest(ByteRequestUtils.fileToByteArray("src/test/java/valid_requests/request_connect_authority_form_1.txt"));
         assertInstanceOf(AuthorityForm.class, request1.getRequestLine().getRequestTarget());
         AuthorityForm parsedRequestTarget = (AuthorityForm) request1.getRequestLine().getRequestTarget();
         assertEquals("www.example.com:80", parsedRequestTarget.getRawString());
@@ -74,19 +73,19 @@ public class RequestParserTest {
 
     @Test
     void parseRequestTest_asteriskForm() throws IOException {
-        Request request1 = RequestParser.parseRequest(fileToByteArray("src/test/java/request_options_asterisk_form_1.txt"));
+        Request request1 = RequestParser.parseRequest(ByteRequestUtils.fileToByteArray("src/test/java/valid_requests/request_options_asterisk_form_1.txt"));
         assertInstanceOf(AsteriskForm.class, request1.getRequestLine().getRequestTarget());
     }
 
-    private static byte[] stringToByteArray(String s) {
-        byte[] byteArray = new byte[s.length()];
-        for (int i = 0; i < byteArray.length; i++) {
-            byteArray[i] = (byte) s.charAt(i);
-        }
-        return byteArray;
-    }
+    @Test
+    void parseRequestTest_nonAsciiInHead() throws IOException {
 
-    public static byte[] fileToByteArray(String path) throws IOException {
-        return Files.readAllBytes(Path.of(path));
+        Exception exception = assertThrows(InvalidRequest.class, () -> {
+            RequestParser.parseRequest(ByteRequestUtils.fileToByteArray("src/test/java/invalid_requests/request_get_origin_form_1.txt"));
+        });
+        String expectedMessage = "head contains bytes that are >= 127 or < 0";
+        String actualMessage = exception.getMessage();
+        assertEquals(expectedMessage, actualMessage);
     }
 }
+

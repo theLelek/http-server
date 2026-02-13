@@ -1,5 +1,7 @@
 package dev.lelek.request.parser;
 
+import dev.lelek.ByteRequestUtils;
+
 import java.util.*;
 
 class HeadersParser {
@@ -11,9 +13,9 @@ class HeadersParser {
 
     private HeadersParser(byte[] rawBytes) {
         this.rawBytes = rawBytes;
-        this.headerStartIndex = 2 + RequestParser.firstIndexOf(rawBytes, new byte[] {'\r', '\n'});
-        this.headerEndIndex = RequestParser.firstIndexOf(rawBytes, new byte[] {'\r', '\n', '\r', '\n'}) - 1;
-        this.stringHeaders = RequestParser.bytesToString(rawBytes, headerStartIndex, headerEndIndex);
+        this.headerStartIndex = 2 + ByteRequestUtils.firstIndexOf(rawBytes, new byte[] {'\r', '\n'});
+        this.headerEndIndex = ByteRequestUtils.firstIndexOf(rawBytes, new byte[] {'\r', '\n', '\r', '\n'}) - 1;
+        this.stringHeaders = ByteRequestUtils.bytesToString(rawBytes, headerStartIndex, headerEndIndex);
     }
 
     public static Map<String, List<String>> parseHeaders(byte[] requestBytes) {

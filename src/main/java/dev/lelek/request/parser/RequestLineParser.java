@@ -1,7 +1,7 @@
 package dev.lelek.request.parser;
 
+import dev.lelek.ByteRequestUtils;
 import dev.lelek.http.Version;
-import dev.lelek.request.model.Request;
 import dev.lelek.request.model.RequestLine;
 import dev.lelek.request.model.uri.*;
 
@@ -21,8 +21,8 @@ class RequestLineParser {
     private RequestLineParser(byte[] rawBytes) {
         this.rawBytes = rawBytes;
         this.requestLineStart = 0;
-        this.getRequestLineEnd = RequestParser.firstIndexOf(rawBytes, new byte[] {'\r', '\n'}) - 1;;
-        this.rawString = RequestParser.bytesToString(rawBytes, requestLineStart, getRequestLineEnd);;
+        this.getRequestLineEnd = ByteRequestUtils.firstIndexOf(rawBytes, new byte[] {'\r', '\n'}) - 1;
+        this.rawString = ByteRequestUtils.bytesToString(rawBytes, requestLineStart, getRequestLineEnd);
         String[] rawStringParts = rawString.split(" ");
         this.stringMethod = rawStringParts[0];
         this.stringRequestTarget = rawStringParts[1];
@@ -31,7 +31,6 @@ class RequestLineParser {
 
     public static RequestLine parseRequestLine(byte[] requestBytes) {
         RequestLineParser requestLineParser = new RequestLineParser(requestBytes);
-
         String method = requestLineParser.stringMethod;
         Version version = requestLineParser.parseHttpVersion();
         RequestTarget requestTarget = requestLineParser.parseRequestTarget();

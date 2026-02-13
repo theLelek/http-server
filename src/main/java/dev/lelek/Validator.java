@@ -1,7 +1,9 @@
 package dev.lelek;
 
 import dev.lelek.request.model.Request;
+import dev.lelek.request.parser.RequestParser;
 
+import java.lang.reflect.Parameter;
 import java.util.Arrays;
 
 public class Validator {
@@ -31,15 +33,6 @@ public class Validator {
         if (! request.getRequestHeaders().containsKey("Host")) {
             throw new InvalidRequest(400, "invalid Request", "Host header is missing");
         }
-    }
-
-    public static void headContainsOnlyAscii(byte[] requestBytes, int start, int end) {
-        for (int i = start; i <= end; i++) {
-            if (!(requestBytes[i] >= 0 && requestBytes[i] < 127)) {
-                throw new InvalidRequest(400, "Bad Request", "head contains bytes that are >= 127 or < 0");
-            }
-        }
-
     }
 
     public Request getRequest() {
