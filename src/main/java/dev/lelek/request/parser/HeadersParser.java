@@ -1,8 +1,11 @@
 package dev.lelek.request.parser;
 
 import dev.lelek.ByteRequestUtils;
+import dev.lelek.InvalidRequest;
 
+import javax.xml.stream.events.Characters;
 import java.util.*;
+
 
 class HeadersParser {
 
@@ -20,6 +23,9 @@ class HeadersParser {
 
     public static Map<String, List<String>> parseHeaders(byte[] requestBytes) {
         HeadersParser headersParser = new HeadersParser(requestBytes);
+        if (Character.isWhitespace((char) requestBytes[headersParser.headerStartIndex])) {
+            throw new InvalidRequest(400, "Bad Request", "request contains whitespace between the start-line and the first header field");
+        }
         Map<String, List<String>> requestHeaders = headersParser.parseHeaders();
         return requestHeaders;
     }

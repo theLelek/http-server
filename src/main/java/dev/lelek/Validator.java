@@ -8,34 +8,24 @@ import java.util.Arrays;
 
 public class Validator {
 
-    private final Request request;
-
-    public Validator(Request request) {
-        this.request = request;
-    }
-
-    public void validate() {
-        isMethodAllowed();
-        validateHeaders();
+    public static void validate(Request request) {
+        isMethodAllowed(request);
+        validateHeaders(request);
 
     }
 
-    private void isMethodAllowed() {
+    private static void isMethodAllowed(Request request) {
         if (! Arrays.asList(HttpConstants.knownMethods).contains(request.getRequestLine().getMethod())) {
             throw new InvalidRequest(501, "Not Implemented", "Request method is not known (known methods can be changed in parser.HttpConstants)");
         }
         if (! Arrays.asList(HttpConstants.implementedMethods).contains(request.getRequestLine().getMethod())) {
-            throw new InvalidRequest(405, "invalid Request", "Request method is not implemented (implemented methods can be changed in parser.HttpConstants)");
+            throw new InvalidRequest(405, "Method Not Allowed", "Request method is not implemented (implemented methods can be changed in parser.HttpConstants)");
         }
     }
 
-    private void validateHeaders() {
+    private static void validateHeaders(Request request) {
         if (! request.getRequestHeaders().containsKey("Host")) {
-            throw new InvalidRequest(400, "invalid Request", "Host header is missing");
+            throw new InvalidRequest(400, "Bad Request", "Host header is missing");
         }
-    }
-
-    public Request getRequest() {
-        return request;
     }
 }
