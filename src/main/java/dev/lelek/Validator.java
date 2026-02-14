@@ -26,4 +26,5 @@ public class Validator {
             throw new InvalidRequest(400, "Bad Request", "Host header is missing");
         }
     }
+// for authority and absolute form
 }

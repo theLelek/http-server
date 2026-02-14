@@ -42,6 +42,9 @@ class HeadersParser {
             }
             String name = line.substring(0, colon).trim().toLowerCase(Locale.ROOT);
             String value = line.substring(colon + 1).trim();
+            if (name.equals("Host") && requestHeaders.containsKey("Host")) {
+                throw new InvalidRequest(400, "Bad Request", "request contains multiple Host header fields");
+            }
             requestHeaders
                     .computeIfAbsent(name, k -> new ArrayList<>())
                     .add(value);
