@@ -1,9 +1,7 @@
 package dev.lelek;
 
 import dev.lelek.request.model.Request;
-import dev.lelek.request.parser.RequestParser;
 
-import java.lang.reflect.Parameter;
 import java.util.Arrays;
 
 public class Validator {
