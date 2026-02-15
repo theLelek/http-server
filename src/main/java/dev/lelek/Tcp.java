@@ -35,8 +35,8 @@ public class Tcp {
         return in.read(buffer);
     }
 
-    public void sendData(String data) throws IOException {
-        out.write(data.getBytes());
+    public void sendData(byte[] bytes) throws IOException {
+        out.write(bytes);
     }
 
     public ServerSocket getServerSocket() {
