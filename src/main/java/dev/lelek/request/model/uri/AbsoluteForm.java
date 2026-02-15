@@ -53,4 +53,20 @@ public class AbsoluteForm extends RequestTarget { // = absolute-URI
     public String getScheme() {
         return scheme;
     }
+
+    public String getAuthority() {
+        return authority;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getPath() {
+        return path;
+    }
 }

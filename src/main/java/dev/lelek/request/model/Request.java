@@ -12,7 +12,7 @@ public class Request extends Message {
     private final RequestLine requestLine;
 
     public Request(byte[] rawBytes, String rawString, String body, Map<String, List<String>> requestHeaders, RequestLine requestLine) {
-        super(rawBytes, body, rawString, requestHeaders);
+        super(rawBytes, rawString, body, requestHeaders);
         this.requestLine = requestLine;
     }
 

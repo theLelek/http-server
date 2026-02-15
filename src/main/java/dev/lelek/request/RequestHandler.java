@@ -20,6 +20,6 @@ public class RequestHandler implements Runnable {
     public void run() {
         Request request = RequestParser.parseRequest(requestBytes);
         Validator.validate(request);
-//        System.out.println(RequestParser.everythingToString(requestBytes));
+        System.out.println();
     }
 }

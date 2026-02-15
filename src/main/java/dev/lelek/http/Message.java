@@ -29,15 +29,15 @@ abstract public class Message {
         return body;
     }
 
+    public byte[] getRawBytes() {
+        return rawBytes;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
                 "requestHeaders=" + requestHeaders +
                 ", body='" + body + '\'' +
                 '}';
-    }
-
-    public byte[] getRawBytes() {
-        return rawBytes;
     }
 }
