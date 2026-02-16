@@ -78,11 +78,8 @@ public class RequestParserTest {
     }
 
     @Test
-    void parseRequestTest_nonAsciiInHead() throws IOException {
-
-        Exception exception = assertThrows(InvalidRequest.class, () -> {
-            RequestParser.parseRequest(ByteRequestUtils.fileToByteArray("src/test/java/invalid_requests/request_get_origin_form_1.txt"));
-        });
+    void parseRequestTest_nonAsciiInHead() {
+        Exception exception = assertThrows(InvalidRequest.class, () -> RequestParser.parseRequest(ByteRequestUtils.fileToByteArray("src/test/java/invalid_requests/request_get_origin_form_1.txt")));
         String expectedMessage = "head contains bytes that are >= 127 or < 0";
         String actualMessage = exception.getMessage();
         assertEquals(expectedMessage, actualMessage);

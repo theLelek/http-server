@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class OriginForm extends RequestTarget {
 
-    private final String absolutePath; //
+    private final String absolutePath;
     Map<String, String> queries;
 
     public OriginForm(String raw, String absolutePath, Map<String, String> queries) {
