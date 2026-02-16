@@ -2,6 +2,7 @@ package dev.lelek.request.parser;
 
 import dev.lelek.ByteRequestUtils;
 import dev.lelek.InvalidRequest;
+import dev.lelek.request.model.HostHeader;
 
 import javax.xml.stream.events.Characters;
 import java.util.*;
@@ -50,5 +51,19 @@ class HeadersParser {
                     .add(value);
         }
         return requestHeaders;
+    }
+
+    public static HostHeader parseHostHeader(Map<String, List<String>> requestHeaders) {
+        String fieldValue = requestHeaders.get("host").getFirst();
+        if (fieldValue.isEmpty()) {
+            return null;
+        }
+        String[] fieldValueParts = fieldValue.split(":");
+        String host = fieldValueParts[0];
+        if (fieldValueParts.length == 1) {
+            return new HostHeader(host, 80);
+        }
+        int port = Integer.parseInt(fieldValueParts[1]);
+        return new HostHeader(host, port);
     }
 }

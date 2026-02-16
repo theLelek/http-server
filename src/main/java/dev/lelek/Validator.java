@@ -46,7 +46,6 @@ public class Validator {
     }
 
     private static void validateAuthorityForm(Request request) {
-
         if (! request.getRequestLine().getMethod().equals("CONNECT")) {
             throw new InvalidRequest(400, "Bad Request", "CONNECT method can only be used with AuthorityForm");
         }

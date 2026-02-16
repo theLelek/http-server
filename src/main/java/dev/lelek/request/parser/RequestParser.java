@@ -2,10 +2,13 @@ package dev.lelek.request.parser;
 
 import dev.lelek.ByteRequestUtils;
 import dev.lelek.InvalidRequest;
+import dev.lelek.request.model.HostHeader;
 import dev.lelek.request.model.Request;
 import dev.lelek.request.model.RequestLine;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+
 
 public class RequestParser {
     public static Request parseRequest(byte[] requestBytes) {
@@ -13,8 +16,9 @@ public class RequestParser {
         String stringRequest = ByteRequestUtils.everythingToString(requestBytes);
         RequestLine requestLine = RequestLineParser.parseRequestLine(requestBytes);
         Map<String, List<String>> requestHeaders = HeadersParser.parseHeaders(requestBytes);
+        HostHeader hostheader = HeadersParser.parseHostHeader(requestHeaders);
         String body = null;
-        return new Request(requestBytes, stringRequest, body, requestHeaders, requestLine);
+        return new Request(requestBytes, stringRequest, body, requestHeaders, requestLine, hostheader);
     }
 
     private static void headContainsOnlyAscii(byte[] requestBytes) {
