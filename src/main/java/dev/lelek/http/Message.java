@@ -6,15 +6,15 @@ import java.util.Map;
 abstract public class Message {
 
     private final String body;
-    private final Map<String, List<String>> requestHeaders;
+    private final Map<String, List<String>> headerFields;
 
-    public Message(String body, Map<String, List<String>> requestHeaders) {
+    public Message(String body, Map<String, List<String>> headerFields) {
         this.body = body;
-        this.requestHeaders = requestHeaders;
+        this.headerFields = headerFields;
     }
 
-    public Map<String, List<String>> getRequestHeaders() {
-        return requestHeaders;
+    public Map<String, List<String>> getHeaderFields() {
+        return headerFields;
     }
 
     public String getBody() {
@@ -24,7 +24,7 @@ abstract public class Message {
     @Override
     public String toString() {
         return "Message{" +
-                "requestHeaders=" + requestHeaders +
+                "requestHeaders=" + headerFields +
                 ", body='" + body + '\'' +
                 '}';
     }

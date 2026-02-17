@@ -62,19 +62,19 @@ public class Validator {
     }
 
     private static void validateHostHeader(Request request) {
-        if (! request.getRequestHeaders().containsKey("host")) {
+        if (! request.getHeaderFields().containsKey("host")) {
             throw new InvalidRequest(400, "Bad Request", "Host header is missing");
         }
         if (request.getRequestLine().getRequestTarget() instanceof AuthorityForm) {
             AuthorityForm authorityForm = (AuthorityForm) request.getRequestLine().getRequestTarget();
             String hostAndPort = authorityForm.getHost() + authorityForm.getPort();
-            if (! hostAndPort.equals(request.getRequestHeaders().get("host"))) {
+            if (! hostAndPort.equals(request.getHeaderFields().get("host"))) {
                 throw new InvalidRequest(400, "Bad Request", "Host header does not match target uri authority");
             }
         } else if (request.getRequestLine().getRequestTarget() instanceof AbsoluteForm) {
             AbsoluteForm absoluteForm = (AbsoluteForm) request.getRequestLine().getRequestTarget();
             String hostAndPort = absoluteForm.getHost() + absoluteForm.getPort();
-            if (! hostAndPort.equals(request.getRequestHeaders().get("host"))) {
+            if (! hostAndPort.equals(request.getHeaderFields().get("host"))) {
                 throw new InvalidRequest(400, "Bad Request", "Host header does not match target uri authority");
             }
         }

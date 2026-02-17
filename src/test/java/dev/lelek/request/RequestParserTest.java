@@ -85,4 +85,3 @@ public class RequestParserTest {
         assertEquals(expectedMessage, actualMessage);
     }
 }
-

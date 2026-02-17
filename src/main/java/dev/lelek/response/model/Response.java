@@ -9,8 +9,8 @@ public class Response extends Message {
 
     private final StatusLine statusLine;
 
-    public Response(String body, Map<String, List<String>> requestHeaders, StatusLine statusLine) {
-        super(body, requestHeaders);
+    public Response(String body, Map<String, List<String>> headerFields, StatusLine statusLine) {
+        super(body, headerFields);
         this.statusLine = statusLine;
     }
 
