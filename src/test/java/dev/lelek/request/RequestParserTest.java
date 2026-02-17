@@ -23,9 +23,9 @@ public class RequestParserTest {
         // TODO add header field tests
         assertEquals("GET", request1.getRequestLine().getMethod());
         assertEquals("/", request1.getRequestLine().getRequestTarget().toString());
-        assertEquals("HTTP",  request1.getRequestLine().getVersion().getHttpName());
-        assertEquals(2, request1.getRequestLine().getVersion().getMajorVersion());
-        assertEquals(1, request1.getRequestLine().getVersion().getMinorVersion());
+        assertEquals("HTTP",  request1.getRequestLine().getVersion().httpName());
+        assertEquals(2, request1.getRequestLine().getVersion().majorVersion());
+        assertEquals(1, request1.getRequestLine().getVersion().minorVersion());
         assertInstanceOf(OriginForm.class, request1.getRequestLine().getRequestTarget());
     }
 
@@ -37,8 +37,8 @@ public class RequestParserTest {
         actualQueries1.put("sort", "price");
         assertEquals("GET", request1.getRequestLine().getMethod());
         assertEquals("/products?id=10&sort=price", request1.getRequestLine().getRequestTarget().getRawString());
-        assertEquals(33, request1.getRequestLine().getVersion().getMajorVersion());
-        assertEquals(20, request1.getRequestLine().getVersion().getMinorVersion());
+        assertEquals(33, request1.getRequestLine().getVersion().majorVersion());
+        assertEquals(20, request1.getRequestLine().getVersion().minorVersion());
         assertInstanceOf(OriginForm.class, request1.getRequestLine().getRequestTarget());
         OriginForm parsedRequestTarget = (OriginForm) request1.getRequestLine().getRequestTarget();
         assertEquals(actualQueries1, parsedRequestTarget.getQueries());
@@ -52,13 +52,13 @@ public class RequestParserTest {
         actualQueries1.put("sort", "price");
         assertEquals("GET", request1.getRequestLine().getMethod());
         assertEquals("http://www.example.org/pub/WWW/TheProject.html?id=10&sort=price", request1.getRequestLine().getRequestTarget().getRawString());
-        assertEquals(99999999, request1.getRequestLine().getVersion().getMajorVersion());
-        assertEquals(0, request1.getRequestLine().getVersion().getMinorVersion());
+        assertEquals(99999999, request1.getRequestLine().getVersion().majorVersion());
+        assertEquals(0, request1.getRequestLine().getVersion().minorVersion());
         assertInstanceOf(AbsoluteForm.class, request1.getRequestLine().getRequestTarget());
         AbsoluteForm parsedRequestTarget = (AbsoluteForm) request1.getRequestLine().getRequestTarget();
         assertEquals(actualQueries1, parsedRequestTarget.getQueries());
         assertEquals("http", parsedRequestTarget.getScheme());
-        assertEquals("//www.example.org/pub/WWW/TheProject.html", parsedRequestTarget.getHierPart());
+        assertEquals("//www.example.org/pub/WWW/TheProject.html", "//" + parsedRequestTarget.getAuthority() + parsedRequestTarget.getPath());
     }
 
     @Test

@@ -1,8 +1,8 @@
 package dev.lelek.request;
 
-import dev.lelek.Validator;
 import dev.lelek.request.model.Request;
 import dev.lelek.Tcp;
+import dev.lelek.request.model.uri.RequestTarget;
 import dev.lelek.request.parser.RequestParser;
 
 import java.io.IOException;
@@ -23,6 +23,7 @@ public class RequestHandler implements Runnable {
     @Override
     public void run() {
         Request request = RequestParser.parseRequest(requestBytes);
+        RequestTarget requestTarget = TargetUriReconstructor.reconstructUri(request.getRequestLine().getRequestTarget(), request.getHostHeader());
         Validator.validate(request);
         System.out.println();
         try {

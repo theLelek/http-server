@@ -1,5 +1,7 @@
-package dev.lelek;
+package dev.lelek.request;
 
+import dev.lelek.HttpConstants;
+import dev.lelek.InvalidRequest;
 import dev.lelek.request.model.Request;
 import dev.lelek.request.model.uri.AbsoluteForm;
 import dev.lelek.request.model.uri.AsteriskForm;

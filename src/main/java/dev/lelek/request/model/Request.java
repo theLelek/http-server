@@ -8,15 +8,17 @@ import java.util.Map;
 
 public class Request extends Message {
 
+    private final byte[] rawBytes;
+    private final String rawString;
     private final RequestLine requestLine;
     private final HostHeader hostHeader;
-    private final AbsoluteForm reconstructedUri;
 
     public Request(byte[] rawBytes, String rawString, String body, Map<String, List<String>> requestHeaders, RequestLine requestLine, HostHeader hostHeader) {
-        super(rawBytes, rawString, body, requestHeaders);
+        super(body, requestHeaders);
+        this.rawBytes = rawBytes;
+        this.rawString = rawString;
         this.requestLine = requestLine;
         this.hostHeader = hostHeader;
-        this.reconstructedUri = null;
     }
 
     public RequestLine getRequestLine() {
@@ -27,7 +29,11 @@ public class Request extends Message {
         return hostHeader;
     }
 
-    public AbsoluteForm getReconstructedUri() {
-        return reconstructedUri;
+    public byte[] getRawBytes() {
+        return rawBytes;
+    }
+
+    public String getRawString() {
+        return rawString;
     }
 }
