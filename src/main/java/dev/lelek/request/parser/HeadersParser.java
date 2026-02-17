@@ -1,10 +1,9 @@
 package dev.lelek.request.parser;
 
 import dev.lelek.ByteRequestUtils;
-import dev.lelek.InvalidRequest;
+import dev.lelek.request.BadRequest;
 import dev.lelek.request.model.HostHeader;
 
-import javax.xml.stream.events.Characters;
 import java.util.*;
 
 
@@ -25,7 +24,7 @@ class HeadersParser {
     public static Map<String, List<String>> parseHeaders(byte[] requestBytes) {
         HeadersParser headersParser = new HeadersParser(requestBytes);
         if (Character.isWhitespace((char) requestBytes[headersParser.headerStartIndex])) {
-            throw new InvalidRequest(400, "Bad Request", "request contains whitespace between the start-line and the first header field");
+            throw new BadRequest(400, "Bad Request", "request contains whitespace between the start-line and the first header field");
         }
         Map<String, List<String>> requestHeaders = headersParser.parseHeaders();
         return requestHeaders;
@@ -44,7 +43,7 @@ class HeadersParser {
             String name = line.substring(0, colon).trim().toLowerCase(Locale.ROOT);
             String value = line.substring(colon + 1).trim();
             if (name.equals("Host") && requestHeaders.containsKey("Host")) {
-                throw new InvalidRequest(400, "Bad Request", "request contains multiple Host header fields");
+                throw new BadRequest(400, "Bad Request", "request contains multiple Host header fields");
             }
             requestHeaders
                     .computeIfAbsent(name, k -> new ArrayList<>())

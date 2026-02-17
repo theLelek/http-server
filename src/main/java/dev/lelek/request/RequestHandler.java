@@ -1,5 +1,6 @@
 package dev.lelek.request;
 
+import dev.lelek.Status;
 import dev.lelek.request.model.Request;
 import dev.lelek.Tcp;
 import dev.lelek.request.model.uri.RequestTarget;
@@ -22,14 +23,25 @@ public class RequestHandler implements Runnable {
 
     @Override
     public void run() {
-        Request request = RequestParser.parseRequest(requestBytes);
-        RequestTarget requestTarget = TargetUriReconstructor.reconstructUri(request.getRequestLine().getRequestTarget(), request.getHostHeader());
-        Validator.validate(request);
-        System.out.println();
+        Status status;
+        Request request;
+        try {
+            request = RequestParser.parseRequest(requestBytes);
+            RequestTarget requestTarget = TargetUriReconstructor.reconstructUri(request.getRequestLine().getRequestTarget(), request.getHostHeader());
+            Validator.validate(request);
+        } catch (BadRequest e) {
+            status = new Status(e.getStatusCode(), e.getReasonPhrase());
+        } catch (IllegalArgumentException e) {
+            status = new Status(500, "Bad Request");
+        } catch (Exception e) {
+            status = new Status(500, "Internal Server Error");
+        }
+
         try {
             byte[] response = Files.readAllBytes(Paths.get("public/index.html"));
             connection.sendData(response);
         } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

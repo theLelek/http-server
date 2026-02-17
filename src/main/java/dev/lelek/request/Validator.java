@@ -1,7 +1,6 @@
 package dev.lelek.request;
 
 import dev.lelek.HttpConstants;
-import dev.lelek.InvalidRequest;
 import dev.lelek.request.model.Request;
 import dev.lelek.request.model.uri.AbsoluteForm;
 import dev.lelek.request.model.uri.AsteriskForm;
@@ -21,10 +20,10 @@ public class Validator {
 
     private static void validateMethod(Request request) {
         if (!Arrays.asList(HttpConstants.knownMethods).contains(request.getRequestLine().getMethod())) {
-            throw new InvalidRequest(501, "Not Implemented", "Request method is not known (known methods can be changed in parser.HttpConstants)");
+            throw new BadRequest(501, "Not Implemented", "Request method is not known (known methods can be changed in parser.HttpConstants)");
         }
         if (!Arrays.asList(HttpConstants.implementedMethods).contains(request.getRequestLine().getMethod())) {
-            throw new InvalidRequest(405, "Method Not Allowed", "Request method is not implemented (implemented methods can be changed in parser.HttpConstants)");
+            throw new BadRequest(405, "Method Not Allowed", "Request method is not implemented (implemented methods can be changed in parser.HttpConstants)");
         }
     }
 
@@ -43,17 +42,17 @@ public class Validator {
 
             }
             default ->
-                    throw new InvalidRequest(400, "Bad Request", "Request target is not supported");
+                    throw new BadRequest(400, "Bad Request", "Request target is not supported");
         }
     }
 
     private static void validateAuthorityForm(Request request) {
         if (! request.getRequestLine().getMethod().equals("CONNECT")) {
-            throw new InvalidRequest(400, "Bad Request", "CONNECT method can only be used with AuthorityForm");
+            throw new BadRequest(400, "Bad Request", "CONNECT method can only be used with AuthorityForm");
         }
         AuthorityForm authorityForm = (AuthorityForm) request.getRequestLine().getRequestTarget();
         if (authorityForm.getPort() != 80) {
-            throw new InvalidRequest(400, "Bad Request", "request port number must be 80");
+            throw new BadRequest(400, "Bad Request", "request port number must be 80");
         }
     }
 
@@ -63,19 +62,19 @@ public class Validator {
 
     private static void validateHostHeader(Request request) {
         if (! request.getHeaderFields().containsKey("host")) {
-            throw new InvalidRequest(400, "Bad Request", "Host header is missing");
+            throw new BadRequest(400, "Bad Request", "Host header is missing");
         }
         if (request.getRequestLine().getRequestTarget() instanceof AuthorityForm) {
             AuthorityForm authorityForm = (AuthorityForm) request.getRequestLine().getRequestTarget();
             String hostAndPort = authorityForm.getHost() + authorityForm.getPort();
             if (! hostAndPort.equals(request.getHeaderFields().get("host"))) {
-                throw new InvalidRequest(400, "Bad Request", "Host header does not match target uri authority");
+                throw new BadRequest(400, "Bad Request", "Host header does not match target uri authority");
             }
         } else if (request.getRequestLine().getRequestTarget() instanceof AbsoluteForm) {
             AbsoluteForm absoluteForm = (AbsoluteForm) request.getRequestLine().getRequestTarget();
             String hostAndPort = absoluteForm.getHost() + absoluteForm.getPort();
             if (! hostAndPort.equals(request.getHeaderFields().get("host"))) {
-                throw new InvalidRequest(400, "Bad Request", "Host header does not match target uri authority");
+                throw new BadRequest(400, "Bad Request", "Host header does not match target uri authority");
             }
         }
     }

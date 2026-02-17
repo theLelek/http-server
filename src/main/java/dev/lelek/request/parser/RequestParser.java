@@ -1,7 +1,7 @@
 package dev.lelek.request.parser;
 
 import dev.lelek.ByteRequestUtils;
-import dev.lelek.InvalidRequest;
+import dev.lelek.request.BadRequest;
 import dev.lelek.request.model.HostHeader;
 import dev.lelek.request.model.Request;
 import dev.lelek.request.model.RequestLine;
@@ -25,7 +25,7 @@ public class RequestParser {
         int end = ByteRequestUtils.getHeadersEndIndex(requestBytes);
         for (int i = 0; i <= end; i++) {
             if (!(requestBytes[i] >= 0 && requestBytes[i] < 127)) {
-                throw new InvalidRequest(400, "Bad Request", "head contains bytes that are >= 127 or < 0");
+                throw new BadRequest(400, "Bad Request", "head contains bytes that are >= 127 or < 0");
             }
         }
     }
