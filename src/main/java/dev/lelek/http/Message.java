@@ -1,15 +1,14 @@
 package dev.lelek.http;
 
-import java.util.List;
 import java.util.Map;
 
 abstract public class Message {
 
-    private final String body;
+    private final byte[] bodyBytes;
     private final Map<String, String> headerFields;
 
-    public Message(String body, Map<String, String> headerFields) {
-        this.body = body;
+    public Message(byte[] bodyBytes, Map<String, String> headerFields) {
+        this.bodyBytes = bodyBytes;
         this.headerFields = headerFields;
     }
 
@@ -17,15 +16,15 @@ abstract public class Message {
         return headerFields;
     }
 
-    public String getBody() {
-        return body;
+    public byte[] getBodyBytes() {
+        return bodyBytes;
     }
 
     @Override
     public String toString() {
         return "Message{" +
                 "requestHeaders=" + headerFields +
-                ", body='" + body + '\'' +
+                ", body='" + bodyBytes + '\'' +
                 '}';
     }
 }

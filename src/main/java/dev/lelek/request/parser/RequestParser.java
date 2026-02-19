@@ -6,6 +6,7 @@ import dev.lelek.request.model.HostHeader;
 import dev.lelek.request.model.Request;
 import dev.lelek.request.model.RequestLine;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +18,8 @@ public class RequestParser {
         RequestLine requestLine = RequestLineParser.parseRequestLine(requestBytes);
         Map<String, String> requestHeaders = HeadersParser.parseHeaders(requestBytes);
         HostHeader hostheader = HeadersParser.parseHostHeader(requestHeaders);
-        String body = null;
-        return new Request(requestBytes, stringRequest, body, requestHeaders, requestLine, hostheader);
+        byte[] bodyBytes = getBodyBytes(requestBytes);
+        return new Request(requestBytes, stringRequest, bodyBytes, requestHeaders, requestLine, hostheader);
     }
 
     private static void headContainsOnlyAscii(byte[] requestBytes) {
@@ -28,5 +29,11 @@ public class RequestParser {
                 throw new BadRequest(400, "Bad Request", "head contains bytes that are >= 127 or < 0");
             }
         }
+    }
+
+    private static byte[] getBodyBytes(byte[] requestBytes) {
+        int startIndex = 4 + ByteRequestUtils.firstIndexOf(requestBytes, new byte[] {'\r', '\n', '\r', '\n'});
+        byte[] bodyBytes = Arrays.copyOfRange(requestBytes, startIndex, requestBytes.length);
+        return bodyBytes;
     }
 }

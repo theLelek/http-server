@@ -12,7 +12,5 @@ class ResponseCreaterTest {
 
     @Test
     void getDefaultHeaders() {
-        Map<String, String> actual =  ResponseCreater.getDefaultHeaders();
-        System.out.println();
     }
 }

@@ -1,17 +1,16 @@
 package dev.lelek.request;
 
+import dev.lelek.ByteRequestUtils;
 import dev.lelek.Status;
 import dev.lelek.request.model.Request;
 import dev.lelek.Tcp;
 import dev.lelek.request.model.uri.RequestTarget;
 import dev.lelek.request.parser.RequestParser;
 import dev.lelek.response.ResponseCreater;
-import dev.lelek.response.ResponseSerializer;
 import dev.lelek.response.model.Response;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 
 
 public class RequestHandler implements Runnable {
@@ -28,9 +27,10 @@ public class RequestHandler implements Runnable {
     public void run() {
         Status status;
         Request request = null;
+        RequestTarget requestTarget = null;
         try {
             request = RequestParser.parseRequest(requestBytes);
-            RequestTarget requestTarget = TargetUriReconstructor.reconstructUri(request.getRequestLine().getRequestTarget(), request.getHostHeader());
+            requestTarget = TargetUriReconstructor.reconstructUri(request.getRequestLine().getRequestTarget(), request.getHostHeader());
             Validator.validate(request);
         } catch (BadRequest e) {
             status = new Status(e.getStatusCode(), e.getReasonPhrase());
@@ -41,8 +41,9 @@ public class RequestHandler implements Runnable {
         }
 
         try {
-            Response response = ResponseCreater.createResponse(request);
-            byte[] responseBytes = ResponseSerializer.serialize(response);
+            Response response = ResponseCreater.createResponse(request, requestTarget);
+            String stringResponse = response.toString();
+            byte[] responseBytes = ByteRequestUtils.stringToByteArray(stringResponse);
             connection.sendData(responseBytes);
         } catch (IOException e) {
             throw new RuntimeException(e);

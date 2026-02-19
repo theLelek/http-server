@@ -12,12 +12,10 @@ import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
-import java.util.Map;
 import java.time.format.DateTimeFormatter;
 
 public class ResponseCreater {
-    public static Response createResponse(Request request) throws IOException {
-        RequestTarget requestTarget = request.getRequestLine().getRequestTarget();
+    public static Response createResponse(Request request, RequestTarget requestTarget) throws IOException {
         if (!(requestTarget instanceof AbsoluteForm)) {
             return null;
         }
@@ -25,16 +23,17 @@ public class ResponseCreater {
         Response response = null;
         switch(((AbsoluteForm) requestTarget).getPath()) {
             case "/":
-                response = HomeHandler.handle(request, (AbsoluteForm) requestTarget, statusLine, getDefaultHeaders());
+                response = HomeHandler.handle(request, (AbsoluteForm) requestTarget, statusLine);
         }
 
+        addDefaultHeaders(response);
         return response;
     }
 
-    public static Map<String, String> getDefaultHeaders() {
+    public static void addDefaultHeaders(Response response) {
+        // TOOD add needed headers for body
         HashMap<String, String> defaultHeaders = new HashMap<>();
-        defaultHeaders.put("Date", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.RFC_1123_DATE_TIME));
-        defaultHeaders.put("Server", "lelek-http/1.0 (Java)");
-        return defaultHeaders;
+        response.getHeaderFields().put("Date", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.RFC_1123_DATE_TIME));
+        response.getHeaderFields().put("Server", "lelek-http/1.0 (Java)");
     }
 }

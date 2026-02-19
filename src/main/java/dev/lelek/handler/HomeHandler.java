@@ -9,16 +9,17 @@ import dev.lelek.response.model.StatusLine;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 
 public class HomeHandler {
-    public static Response handle(Request request, AbsoluteForm requestTarget, StatusLine statusLine, Map<String, String> headerFields) throws IOException {
+    public static Response handle(Request request, AbsoluteForm requestTarget, StatusLine statusLine) throws IOException {
 
-        byte[] responseBody = Files.readAllBytes(Paths.get("public/index.html"));
+        byte[] bodyBytes = Files.readAllBytes(Paths.get("public/index.html"));
+        Map<String, String> headerFields = new HashMap<>();
 
-        Response response = new Response(ByteRequestUtils.bytesToString(responseBody), headerFields, statusLine);
+        Response response = new Response(bodyBytes, headerFields, statusLine);
         return response;
     }
 }
