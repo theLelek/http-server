@@ -13,7 +13,7 @@ public class Request extends Message {
     private final RequestLine requestLine;
     private final HostHeader hostHeader;
 
-    public Request(byte[] rawBytes, String rawString, String body, Map<String, List<String>> requestHeaders, RequestLine requestLine, HostHeader hostHeader) {
+    public Request(byte[] rawBytes, String rawString, String body, Map<String, String> requestHeaders, RequestLine requestLine, HostHeader hostHeader) {
         super(body, requestHeaders);
         this.rawBytes = rawBytes;
         this.rawString = rawString;

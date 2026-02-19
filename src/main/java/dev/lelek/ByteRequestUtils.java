@@ -23,7 +23,7 @@ public class ByteRequestUtils {
         return -1;
     }
 
-    public static String everythingToString(byte[] request) {
+    public static String bytesToString(byte[] request) {
         StringBuilder out = new StringBuilder();
         for (byte b : request) {
             out.append((char) b);

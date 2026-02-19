@@ -13,9 +13,9 @@ import java.util.Map;
 public class RequestParser {
     public static Request parseRequest(byte[] requestBytes) {
         headContainsOnlyAscii(requestBytes);
-        String stringRequest = ByteRequestUtils.everythingToString(requestBytes);
+        String stringRequest = ByteRequestUtils.bytesToString(requestBytes);
         RequestLine requestLine = RequestLineParser.parseRequestLine(requestBytes);
-        Map<String, List<String>> requestHeaders = HeadersParser.parseHeaders(requestBytes);
+        Map<String, String> requestHeaders = HeadersParser.parseHeaders(requestBytes);
         HostHeader hostheader = HeadersParser.parseHostHeader(requestHeaders);
         String body = null;
         return new Request(requestBytes, stringRequest, body, requestHeaders, requestLine, hostheader);

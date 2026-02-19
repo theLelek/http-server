@@ -3,7 +3,7 @@ package dev.lelek.response.model;
 import dev.lelek.http.StartLine;
 import dev.lelek.http.Version;
 
-class StatusLine extends StartLine {
+public class StatusLine extends StartLine {
 
     private final int statusCode;
     private final String reasonPhrase;

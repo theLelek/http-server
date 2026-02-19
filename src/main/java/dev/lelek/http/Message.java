@@ -6,14 +6,14 @@ import java.util.Map;
 abstract public class Message {
 
     private final String body;
-    private final Map<String, List<String>> headerFields;
+    private final Map<String, String> headerFields;
 
-    public Message(String body, Map<String, List<String>> headerFields) {
+    public Message(String body, Map<String, String> headerFields) {
         this.body = body;
         this.headerFields = headerFields;
     }
 
-    public Map<String, List<String>> getHeaderFields() {
+    public Map<String, String> getHeaderFields() {
         return headerFields;
     }
 

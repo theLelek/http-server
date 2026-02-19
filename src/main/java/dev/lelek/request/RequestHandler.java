@@ -5,6 +5,9 @@ import dev.lelek.request.model.Request;
 import dev.lelek.Tcp;
 import dev.lelek.request.model.uri.RequestTarget;
 import dev.lelek.request.parser.RequestParser;
+import dev.lelek.response.ResponseCreater;
+import dev.lelek.response.ResponseSerializer;
+import dev.lelek.response.model.Response;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,7 +27,7 @@ public class RequestHandler implements Runnable {
     @Override
     public void run() {
         Status status;
-        Request request;
+        Request request = null;
         try {
             request = RequestParser.parseRequest(requestBytes);
             RequestTarget requestTarget = TargetUriReconstructor.reconstructUri(request.getRequestLine().getRequestTarget(), request.getHostHeader());
@@ -32,14 +35,15 @@ public class RequestHandler implements Runnable {
         } catch (BadRequest e) {
             status = new Status(e.getStatusCode(), e.getReasonPhrase());
         } catch (IllegalArgumentException e) {
-            status = new Status(500, "Bad Request");
+            status = new Status(400, "Bad Request");
         } catch (Exception e) {
             status = new Status(500, "Internal Server Error");
         }
 
         try {
-            byte[] response = Files.readAllBytes(Paths.get("public/index.html"));
-            connection.sendData(response);
+            Response response = ResponseCreater.createResponse(request);
+            byte[] responseBytes = ResponseSerializer.serialize(response);
+            connection.sendData(responseBytes);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

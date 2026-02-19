@@ -9,7 +9,7 @@ public class Response extends Message {
 
     private final StatusLine statusLine;
 
-    public Response(String body, Map<String, List<String>> headerFields, StatusLine statusLine) {
+    public Response(String body, Map<String, String> headerFields, StatusLine statusLine) {
         super(body, headerFields);
         this.statusLine = statusLine;
     }

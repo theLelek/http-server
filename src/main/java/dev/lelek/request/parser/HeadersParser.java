@@ -21,17 +21,17 @@ class HeadersParser {
         this.stringHeaders = ByteRequestUtils.bytesToString(rawBytes, headerStartIndex, headerEndIndex);
     }
 
-    public static Map<String, List<String>> parseHeaders(byte[] requestBytes) {
+    public static Map<String, String> parseHeaders(byte[] requestBytes) {
         HeadersParser headersParser = new HeadersParser(requestBytes);
         if (Character.isWhitespace((char) requestBytes[headersParser.headerStartIndex])) {
             throw new BadRequest(400, "Bad Request", "request contains whitespace between the start-line and the first header field");
         }
-        Map<String, List<String>> requestHeaders = headersParser.parseHeaders();
+        Map<String, String> requestHeaders = headersParser.parseHeaders();
         return requestHeaders;
     }
 
-    public Map<String, List<String>> parseHeaders() {
-        Map<String, List<String>> requestHeaders = new LinkedHashMap<>();
+    public Map<String, String> parseHeaders() {
+        Map<String, String> requestHeaders = new HashMap<>();
         String unfolded = stringHeaders.replaceAll("\r\n[ \t]+", " ");
         String[] lines = unfolded.split("\r\n");
         for (String line : lines) {
@@ -42,18 +42,20 @@ class HeadersParser {
             }
             String name = line.substring(0, colon).trim().toLowerCase(Locale.ROOT);
             String value = line.substring(colon + 1).trim();
-            if (name.equals("Host") && requestHeaders.containsKey("Host")) {
+            if (name.equals("host") && requestHeaders.containsKey("host")) {
                 throw new BadRequest(400, "Bad Request", "request contains multiple Host header fields");
             }
-            requestHeaders
-                    .computeIfAbsent(name, k -> new ArrayList<>())
-                    .add(value);
+            if (! requestHeaders.containsKey(name)) {
+                requestHeaders.put(name, value);
+            } else {
+                requestHeaders.put(name, requestHeaders.get(name) + value);
+            }
         }
         return requestHeaders;
     }
 
-    public static HostHeader parseHostHeader(Map<String, List<String>> requestHeaders) {
-        String fieldValue = requestHeaders.get("host").getFirst();
+    public static HostHeader parseHostHeader(Map<String, String> requestHeaders) {
+        String fieldValue = requestHeaders.get("host");
         if (fieldValue.isEmpty()) {
             return null;
         }
