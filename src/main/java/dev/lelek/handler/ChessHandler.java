@@ -11,10 +11,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-
-public class HomeHandler {
+public class ChessHandler {
     public static Response handle(Request request, AbsoluteForm requestTarget, StatusLine statusLine) throws IOException {
-        byte[] bodyBytes = Files.readAllBytes(Paths.get("public/index.html"));
+        byte[] bodyBytes = Files.readAllBytes(Paths.get("public/chess.html"));
         Map<String, String> headerFields = new HashMap<>();
         headerFields.put("Content-Type", "text/html");
         headerFields.put("Connection", "close");

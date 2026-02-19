@@ -36,4 +36,9 @@ public class Request extends Message {
     public String getRawString() {
         return rawString;
     }
+
+    @Override
+    public String toString() {
+        return rawString;
+    }
 }

@@ -8,6 +8,7 @@ import dev.lelek.request.model.uri.RequestTarget;
 import dev.lelek.request.parser.RequestParser;
 import dev.lelek.response.ResponseCreater;
 import dev.lelek.response.model.Response;
+import dev.lelek.response.model.StatusLine;
 
 import java.io.IOException;
 
@@ -39,19 +40,8 @@ public class RequestHandler implements Runnable {
             status = new Status(500, "Internal Server Error");
         }
 
-        if (status != null) {
-            Response response = ResponseCreater.invalidResponse(status);
-            String stringResponse = response.toString();
-            byte[] responseBytes = ByteRequestUtils.stringToBytes(stringResponse);
-            try {
-                connection.sendData(responseBytes);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return;
-        }
         try {
-            Response response = ResponseCreater.createResponse(request, requestTarget);
+            Response response = ResponseCreater.createResponse(request, requestTarget, status);
             String stringResponse = response.toString();
             byte[] responseBytes = ByteRequestUtils.stringToBytes(stringResponse);
             connection.sendData(responseBytes);

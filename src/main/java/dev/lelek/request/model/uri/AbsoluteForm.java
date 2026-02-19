@@ -42,7 +42,7 @@ public class AbsoluteForm extends RequestTarget { // = absolute-URI
     }
 
     public AbsoluteForm(OriginForm originForm, HostHeader hostHeader) {
-        super(null);
+        super("http://" + hostHeader.host() + ":" + hostHeader.port() + originForm.getAbsolutePath());
         this.scheme = "http";
         this.queries = originForm.getQueries();
         this.authority = hostHeader.host() + ":" + hostHeader.port(); // = host

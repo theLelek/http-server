@@ -11,6 +11,9 @@ import java.util.Arrays;
 
 public class Validator {
 
+    public static final String[] implementedMethods = {"GET", "HEAD"}; // TODO not implemented yet
+    public static final String[] knownMethods = {"OPTIONS", "GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "CONNECT"};
+
     public static void validate(Request request) {
         validateMethod(request);
         validateHeaders(request);
@@ -19,10 +22,10 @@ public class Validator {
     }
 
     private static void validateMethod(Request request) {
-        if (!Arrays.asList(HttpConstants.knownMethods).contains(request.getRequestLine().getMethod())) {
+        if (!Arrays.asList(knownMethods).contains(request.getRequestLine().getMethod())) {
             throw new BadRequest(501, "Not Implemented", "Request method is not known (known methods can be changed in parser.HttpConstants)");
         }
-        if (!Arrays.asList(HttpConstants.implementedMethods).contains(request.getRequestLine().getMethod())) {
+        if (!Arrays.asList(implementedMethods).contains(request.getRequestLine().getMethod())) {
             throw new BadRequest(405, "Method Not Allowed", "Request method is not implemented (implemented methods can be changed in parser.HttpConstants)");
         }
     }
@@ -58,6 +61,9 @@ public class Validator {
 
     private static void validateHeaders(Request request) {
         validateHostHeader(request);
+        if (request.getHeaderFields().containsKey("transfer-encoding")) {
+            throw new BadRequest(501, "Not Implemented", "header field: Transfer-Encoding, is not implemented");
+        }
     }
 
     private static void validateHostHeader(Request request) {

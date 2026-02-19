@@ -27,7 +27,7 @@ public class Main {
     }
 
     public static byte[] removeElements(byte[] arr1, int start) {
-        byte[] arr2 = new byte[start];
+        byte[] arr2 = new byte[start]; // TODO fix bug where start = -1
         for (int i = 0; i < start; i++) {
             arr2[i] = arr1[i];
         }

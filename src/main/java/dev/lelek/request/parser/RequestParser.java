@@ -18,8 +18,12 @@ public class RequestParser {
         RequestLine requestLine = RequestLineParser.parseRequestLine(requestBytes);
         Map<String, String> requestHeaders = HeadersParser.parseHeaders(requestBytes);
         HostHeader hostheader = HeadersParser.parseHostHeader(requestHeaders);
-        byte[] bodyBytes = getBodyBytes(requestBytes);
-        return new Request(requestBytes, stringRequest, bodyBytes, requestHeaders, requestLine, hostheader);
+        if (requestHeaders.containsKey("Content-Length")) {
+            byte[] bodyBytes = getBodyBytes(requestBytes, Integer.valueOf(requestHeaders.get("Content-Length")));
+            return new Request(requestBytes, stringRequest, bodyBytes, requestHeaders, requestLine, hostheader);
+        } else {
+            return new Request(requestBytes, stringRequest, null, requestHeaders, requestLine, hostheader);
+        }
     }
 
     private static void headContainsOnlyAscii(byte[] requestBytes) {
@@ -31,9 +35,9 @@ public class RequestParser {
         }
     }
 
-    private static byte[] getBodyBytes(byte[] requestBytes) {
+    private static byte[] getBodyBytes(byte[] requestBytes, int endIndex) {
         int startIndex = 4 + ByteRequestUtils.firstIndexOf(requestBytes, new byte[] {'\r', '\n', '\r', '\n'});
-        byte[] bodyBytes = Arrays.copyOfRange(requestBytes, startIndex, requestBytes.length);
+        byte[] bodyBytes = Arrays.copyOfRange(requestBytes, startIndex, startIndex + endIndex);
         return bodyBytes;
     }
 }
