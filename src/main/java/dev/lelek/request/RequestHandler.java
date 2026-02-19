@@ -10,7 +10,6 @@ import dev.lelek.response.ResponseCreater;
 import dev.lelek.response.model.Response;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 
 public class RequestHandler implements Runnable {
@@ -25,7 +24,7 @@ public class RequestHandler implements Runnable {
 
     @Override
     public void run() {
-        Status status;
+        Status status = null;
         Request request = null;
         RequestTarget requestTarget = null;
         try {
@@ -40,10 +39,21 @@ public class RequestHandler implements Runnable {
             status = new Status(500, "Internal Server Error");
         }
 
+        if (status != null) {
+            Response response = ResponseCreater.invalidResponse(status);
+            String stringResponse = response.toString();
+            byte[] responseBytes = ByteRequestUtils.stringToBytes(stringResponse);
+            try {
+                connection.sendData(responseBytes);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return;
+        }
         try {
             Response response = ResponseCreater.createResponse(request, requestTarget);
             String stringResponse = response.toString();
-            byte[] responseBytes = ByteRequestUtils.stringToByteArray(stringResponse);
+            byte[] responseBytes = ByteRequestUtils.stringToBytes(stringResponse);
             connection.sendData(responseBytes);
         } catch (IOException e) {
             throw new RuntimeException(e);

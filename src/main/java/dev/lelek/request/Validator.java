@@ -1,6 +1,6 @@
 package dev.lelek.request;
 
-import dev.lelek.HttpConstants;
+import dev.lelek.http.HttpConstants;
 import dev.lelek.request.model.Request;
 import dev.lelek.request.model.uri.AbsoluteForm;
 import dev.lelek.request.model.uri.AsteriskForm;

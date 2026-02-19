@@ -2,7 +2,7 @@ package dev.lelek.request.model;
 
 import dev.lelek.http.StartLine;
 import dev.lelek.http.Version;
-import dev.lelek.HttpConstants;
+import dev.lelek.http.HttpConstants;
 import dev.lelek.request.model.uri.RequestTarget;
 
 public class RequestLine extends StartLine {

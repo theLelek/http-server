@@ -1,6 +1,5 @@
 package dev.lelek.handler;
 
-import dev.lelek.ByteRequestUtils;
 import dev.lelek.request.model.Request;
 import dev.lelek.request.model.uri.AbsoluteForm;
 import dev.lelek.response.model.Response;
@@ -18,7 +17,6 @@ public class HomeHandler {
 
         byte[] bodyBytes = Files.readAllBytes(Paths.get("public/index.html"));
         Map<String, String> headerFields = new HashMap<>();
-
         Response response = new Response(bodyBytes, headerFields, statusLine);
         return response;
     }

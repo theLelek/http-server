@@ -44,7 +44,7 @@ public class ByteRequestUtils {
     }
 
 
-    public static byte[] stringToByteArray(String s) {
+    public static byte[] stringToBytes(String s) {
         byte[] byteArray = new byte[s.length()];
         for (int i = 0; i < byteArray.length; i++) {
             byteArray[i] = (byte) s.charAt(i);
