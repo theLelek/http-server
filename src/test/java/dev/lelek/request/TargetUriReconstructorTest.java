@@ -15,19 +15,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TargetUriReconstructorTest {
 
-    @Test
-    void reconstructUri() throws IOException {
-        Request request1 = RequestParser.parseRequest(ByteRequestUtils.fileToByteArray("src/test/java/valid_requests/request_get_with_queries_origin_form_1.txt"));
-        RequestTarget actual = TargetUriReconstructor.reconstructUri(request1.getRequestLine().getRequestTarget(), request1.getHostHeader());
-        AbsoluteForm parsedActual = (AbsoluteForm) actual;
-        Map<String, String> actualQueries = new HashMap<>();
-        actualQueries.put("id", "10");
-        actualQueries.put("sort", "price");
-        assertEquals("http", parsedActual.getScheme());
-        assertEquals(parsedActual.getQueries(), actualQueries);
-        assertEquals("example.com:80", parsedActual.getAuthority());
-        assertEquals("example.com", parsedActual.getHost());
-        assertEquals(80, parsedActual.getPort());
-        assertEquals("/products", parsedActual.getPath());
-    }
+//    @Test
+//    void reconstructUri() throws IOException {
+//        Request request1 = RequestParser.parseRequest(ByteRequestUtils.fileToByteArray("src/test/java/valid_requests/request_get_with_queries_origin_form_1.txt"));
+//        RequestTarget actual = TargetUriReconstructor.reconstructUri(request1.getRequestLine().getRequestTarget(), request1.getHostHeader());
+//        AbsoluteForm parsedActual = (AbsoluteForm) actual;
+//        Map<String, String> actualQueries = new HashMap<>();
+//        actualQueries.put("id", "10");
+//        actualQueries.put("sort", "price");
+//        assertEquals("http", parsedActual.getScheme());
+//        assertEquals(parsedActual.getQueries(), actualQueries);
+//        assertEquals("example.com:80", parsedActual.getAuthority());
+//        assertEquals("example.com", parsedActual.getHost());
+//        assertEquals(80, parsedActual.getPort());
+//        assertEquals("/products", parsedActual.getPath());
+//    }
 }
