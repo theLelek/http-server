@@ -6,7 +6,7 @@ import java.io.*;
 import dev.lelek.request.RequestHandler;
 public class Main {
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(8080);
+        ServerSocket serverSocket = new ServerSocket(8081);
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
