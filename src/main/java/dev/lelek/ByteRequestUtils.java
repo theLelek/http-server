@@ -23,6 +23,13 @@ public class ByteRequestUtils {
         return -1;
     }
 
+    public static byte[] addArray(byte[] arr, byte[] toAdd) {
+        byte[] newArr = new byte[arr.length + toAdd.length];
+        System.arraycopy(arr, 0, newArr, 0, arr.length);
+        System.arraycopy(toAdd, 0, newArr, arr.length, toAdd.length);
+        return newArr;
+    }
+
     public static String bytesToString(byte[] request) {
         StringBuilder out = new StringBuilder();
         for (byte b : request) {
@@ -42,7 +49,6 @@ public class ByteRequestUtils {
     public static int getHeadersEndIndex(byte[] bytes) {
         return firstIndexOf(bytes, new byte[]{'\r', '\n', '\r', '\n'}) - 1;
     }
-
 
     public static byte[] stringToBytes(String s) {
         byte[] byteArray = new byte[s.length()];

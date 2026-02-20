@@ -5,6 +5,7 @@ import dev.lelek.http.Version;
 import dev.lelek.request.model.RequestLine;
 import dev.lelek.request.model.uri.*;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 

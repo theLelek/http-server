@@ -55,7 +55,7 @@ public class ResponseCreater {
             return invalidResponse(status);
         }
 
-        StatusLine statusLine = new StatusLine(ResponseConstants.VERSION, 200, "OK"); // TODO create StatusLine creater method
+        StatusLine statusLine = new StatusLine(ResponseConstants.VERSION, 200, "OK");
         Response response = null;
         System.out.println(((AbsoluteForm) requestTarget).getPath());
         switch(((AbsoluteForm) requestTarget).getPath()) {

@@ -3,24 +3,28 @@ package dev.lelek.request;
 import dev.lelek.ByteRequestUtils;
 import dev.lelek.Status;
 import dev.lelek.request.model.Request;
-import dev.lelek.Tcp;
 import dev.lelek.request.model.uri.RequestTarget;
 import dev.lelek.request.parser.RequestParser;
 import dev.lelek.response.ResponseCreater;
 import dev.lelek.response.model.Response;
-import dev.lelek.response.model.StatusLine;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 
 
 public class RequestHandler implements Runnable {
 
-    private final byte[] requestBytes;
-    private final Tcp connection;
 
-    public RequestHandler(byte[] requestBytes, Tcp connection) {
-        this.requestBytes = requestBytes;
-        this.connection = connection;
+    private final Socket socket;
+    private final InputStream in;
+    private final OutputStream out;
+
+    public RequestHandler(Socket socket) throws IOException {
+        this.socket = socket;
+        this.in = socket.getInputStream();
+        this.out = socket.getOutputStream();
     }
 
     @Override
@@ -29,7 +33,7 @@ public class RequestHandler implements Runnable {
         Request request = null;
         RequestTarget requestTarget = null;
         try {
-            request = RequestParser.parseRequest(requestBytes);
+            request = RequestParser.parseRequest(in);
             requestTarget = TargetUriReconstructor.reconstructUri(request.getRequestLine().getRequestTarget(), request.getHostHeader());
             Validator.validate(request);
         } catch (BadRequest e) {
@@ -39,14 +43,26 @@ public class RequestHandler implements Runnable {
         } catch (Exception e) {
             status = new Status(500, "Internal Server Error");
         }
-
         try {
             Response response = ResponseCreater.createResponse(request, requestTarget, status);
             String stringResponse = response.toString();
             byte[] responseBytes = ByteRequestUtils.stringToBytes(stringResponse);
-            connection.sendData(responseBytes);
+            out.write(responseBytes);
+            out.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public InputStream getIn() {
+        return in;
+    }
+
+    public OutputStream getOut() {
+        return out;
     }
 }

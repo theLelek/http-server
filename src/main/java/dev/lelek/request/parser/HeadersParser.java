@@ -16,7 +16,7 @@ class HeadersParser {
 
     private HeadersParser(byte[] rawBytes) {
         this.rawBytes = rawBytes;
-        this.headerStartIndex = 2 + ByteRequestUtils.firstIndexOf(rawBytes, new byte[] {'\r', '\n'});
+        this.headerStartIndex = 0;
         this.headerEndIndex = ByteRequestUtils.firstIndexOf(rawBytes, new byte[] {'\r', '\n', '\r', '\n'}) - 1;
         this.stringHeaders = ByteRequestUtils.bytesToString(rawBytes, headerStartIndex, headerEndIndex);
     }
@@ -54,17 +54,5 @@ class HeadersParser {
         return requestHeaders;
     }
 
-    public static HostHeader parseHostHeader(Map<String, String> requestHeaders) {
-        String fieldValue = requestHeaders.get("host");
-        if (fieldValue.isEmpty()) {
-            return null;
-        }
-        String[] fieldValueParts = fieldValue.split(":");
-        String host = fieldValueParts[0];
-        if (fieldValueParts.length == 1) {
-            return new HostHeader(host, 80);
-        }
-        int port = Integer.parseInt(fieldValueParts[1]);
-        return new HostHeader(host, port);
-    }
+
 }
