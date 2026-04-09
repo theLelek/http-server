@@ -1,0 +1,43 @@
+html {
+    min-height: 100vh;
+    background-color: #282f3a;
+}
+
+body {
+    color: #dcdede;
+    font-family: "Courier New";
+    font-size: 12pt;
+    line-height: 1.8em;
+}
+
+header {
+    margin-top: 40px;
+}
+
+.container {
+    max-width: 1200px;  /* the furthest right content goes */
+    margin: 0 auto;     /* centers it horizontally */
+    padding: 0 20px;    /* breathing room on the sides */
+}
+
+.nav-list {
+    padding-bottom: 20px;
+    padding-left: 0;
+}
+
+.nav-list li {
+    display: inline;
+    margin-right: 30px;
+}
+
+a {
+    color: inherit;
+}
+
+a:hover {
+    color: lightskyblue;
+}
+
+footer {
+    text-align: center;
+}
