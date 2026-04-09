@@ -69,6 +69,10 @@ public class ResponseCreater {
                 response = getResponseWithBody("/css/style.css",  statusLine);
                 response.getHeaderFields().put("Content-Type", "text/css");
                 break;
+            case "/css/main.css":
+                response = getResponseWithBody("/css/main.css",  statusLine);
+                response.getHeaderFields().put("Content-Type", "text/css");
+                break;
             case "/js/chess_bot.js":
                 response = getResponseWithBody("/js/chess_bot.js",  statusLine);
                 response.getHeaderFields().put("Content-Type", "text/javascript");
