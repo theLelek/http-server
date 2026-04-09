@@ -1,0 +1,13 @@
+.posts-list {
+    padding-left: 0;
+}
+
+.posts-list li {
+    display: block;
+    margin-bottom: 50px;
+
+}
+
+.posts-list li * {
+    line-height: 30%;
+}
