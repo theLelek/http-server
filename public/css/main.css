@@ -22,19 +22,28 @@ header {
     flex: 1;
 }
 
-.nav-list {
-    padding-bottom: 20px;
-    padding-left: 0;
+.nav-list-top {
+    padding-bottom: 10px;
+    padding-left: 10px;
+    font-size: 2em;
+
 }
 
-.nav-list li {
+.nav-list-top li {
     display: inline;
-    margin-right: 30px;
+    margin-right: 1em;
+}
+
+.nav-list-bottom{
+}
+
+.nav-list-bottom li {
+    display: inline;
+    margin-right: 1em;
 }
 
 a {
     color: rgb(126, 146, 162);
-
 }
 
 a:hover {
